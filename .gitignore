@@ -36,6 +36,9 @@ out/
 ### VS Code ###
 .vscode/
 
+### Mac OS ###
+**/.DS_Store
+
 ### application-{profile}.properties ###
 **/src/main/resources/**/application-*.properties
 
