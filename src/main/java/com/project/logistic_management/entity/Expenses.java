@@ -20,11 +20,11 @@ public class Expenses {
     @Column(name = "schedule_id")
     private Integer scheduleId;
 
-    @Column(name = "total_amount")
-    private Float totalAmount;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "amount")
+    private Float amount;
 
     @Column(name = "created_at")
     private Date createdAt;

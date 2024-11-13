@@ -1,13 +1,15 @@
 package com.project.logistic_management.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "schedule")
 public class Schedule {
@@ -35,6 +37,9 @@ public class Schedule {
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "expenses_status")
+    private Integer expensesStatus;
 
     @Column(name = "created_at")
     private Date createdAt;
