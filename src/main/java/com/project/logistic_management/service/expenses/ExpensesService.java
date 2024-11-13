@@ -10,5 +10,5 @@ import java.util.List;
 public interface ExpensesService {
     //Khai báo các hàm giao tiep giữa repo và controller
     Expenses createExpenses(ExpensesDTO dto);
-    List<Expenses> getExpenses();
+    List<ExpensesDTO> getExpenses();
 }

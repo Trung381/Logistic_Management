@@ -13,10 +13,16 @@ public class BaseResponse<T> {
     private String message;
 
     public static <T> BaseResponse<T> ok(T data) {
-        return null;
+        return BaseResponse.<T>builder()
+                .data(data)
+                .status("success")
+                .build();
     }
 
     public static <T> BaseResponse<T> fail(String msg) {
-        return null;
+        return BaseResponse.<T>builder()
+                .status("fail")
+                .message(msg)
+                .build();
     }
 }
