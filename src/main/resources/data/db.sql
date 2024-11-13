@@ -57,6 +57,11 @@ CREATE TABLE `goods` (
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO `goods` (id, name, quantity, price, created_at, updated_at)
+VALUES (1, "Gạch", 300, 5000000, now(), now()),
+		(2, "Đá", 100, 3500000, now(), now()),
+        (3, "Xi măng", 500, 7000000, now(), now());
+
 CREATE TABLE `inbound_transaction_detail` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `inbound_transaction_id` INT UNSIGNED NOT NULL,
@@ -145,6 +150,14 @@ CREATE TABLE `schedule_config` (
 ) ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+INSERT INTO `schedule_config` (id, place_a, place_b, commission, created_at, updated_at)
+VALUES (1, "Hà Nội", "Thành phố Hồ Chí Minh", 10000000, now(), now()),
+		(2, "Hà Nội", "Đà Nẵng", 7000000, now(), now()),
+        (3, "Hà Nội", "Thừa Thiên - Huế", 5500000, now(), now()),
+        (4, "Hà Nội", "Bình Dương", 9000000, now(), now()),
+        (5, "Hà Nội", "Bắc Giang", 4000000, now(), now()),
+        (6, "Hà Nội", "Lào Cai", 4500000, now(), now());
 
 CREATE TABLE `schedule` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
