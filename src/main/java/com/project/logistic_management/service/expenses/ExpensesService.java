@@ -10,5 +10,6 @@ import java.util.List;
 public interface ExpensesService {
     //Khai báo các hàm giao tiep giữa repo và controller
     Expenses createExpenses(ExpensesDTO dto);
-    List<ExpensesDTO> getExpenses();
+    List<ExpensesDTO> getExpenses(Integer driverId);
+    List<ExpensesDTO> getExpensesByScheduleId(Integer scheduleId);
 }

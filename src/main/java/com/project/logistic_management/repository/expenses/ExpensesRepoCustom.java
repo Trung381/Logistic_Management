@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ExpensesRepoCustom {
     //Khai báo các hàm truy vấn db
-    List<ExpensesDTO> getExpenses();
+    List<ExpensesDTO> getExpenses(List<Integer> schedulesId);
 }

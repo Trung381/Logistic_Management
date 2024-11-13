@@ -13,7 +13,7 @@ public class ExpensesDetailDTO {
 //    @NotNull(message = "ID chi phí không được để trống!")
 //    private Integer expensesId;
 
-    @NotBlank(message = "dpivjdfkbjklfmnk")
+    @NotBlank(message = "Mô tả chi phí không được để trống!")
     private String description;
 
     private Integer quantity = 0;

@@ -168,6 +168,7 @@ CREATE TABLE `schedule` (
   `departure_time` TIMESTAMP NOT NULL COMMENT "Thời gian khởi hành",
   `arrival_time` TIMESTAMP NOT NULL COMMENT "Thời gian hoàn thành",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái lịch trình: -1 - Không duyệt, 0 - Đang chờ, 1 - Đã duyệt và chưa hoàn thành, 2 - Đã hoàn thành",
+  `expenses_status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái thanh toán chi phí: 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
   PRIMARY KEY (`id`),
@@ -225,24 +226,11 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE `expenses` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `schedule_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến lịch trình",
-  `total_amount` FLOAT NOT NULL DEFAULT 0 COMMENT "Tổng chi phí",
-  `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái thanh toán cho tài xế: 0 - Chưa thanh toán, 1 - đã thanh toán",
+  `amount` FLOAT NOT NULL DEFAULT 0 COMMENT "Giá tiền",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
   PRIMARY KEY (`id`),
   FOREIGN KEY (`schedule_id`) REFERENCES `schedule`(`id`)
-) ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
-
-CREATE TABLE `expenses_detail` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `expenses_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến expenses",
-  `description` TEXT NOT NULL COMMENT "Mô tả thêm về chi phí",
-  `quantity` INT,
-  `amount` FLOAT NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`expenses_id`) REFERENCES `expenses`(`id`)
 ) ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;

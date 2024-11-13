@@ -1,5 +1,6 @@
 package com.project.logistic_management.controller;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.service.expenses.ExpensesService;
@@ -26,7 +27,14 @@ public class ExpensesController {
     @GetMapping()
     public ResponseEntity<Object> getExpenses() {
         return ResponseEntity.ok(
-                BaseResponse.ok(expensesService.getExpenses())
+                BaseResponse.ok(expensesService.getExpenses(null))
+        );
+    }
+
+    @GetMapping("/expenses_of_driver/{id}")
+    public ResponseEntity<Object> getExpensesByUserId(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(expensesService.getExpenses(id))
         );
     }
 }
