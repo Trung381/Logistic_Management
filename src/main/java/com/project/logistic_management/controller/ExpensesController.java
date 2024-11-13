@@ -23,8 +23,10 @@ public class ExpensesController {
         );
     }
 
-    @GetMapping("/expenses")
+    @GetMapping()
     public ResponseEntity<Object> getExpenses() {
-        return ResponseEntity.ok(expensesService.getExpenses());
+        return ResponseEntity.ok(
+                BaseResponse.ok(expensesService.getExpenses())
+        );
     }
 }

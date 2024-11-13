@@ -1,15 +1,19 @@
 package com.project.logistic_management.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class ExpensesDetailDTO {
-    @NotNull(message = "ID chi phí không được để trống!")
-    private Integer expensesId;
+//    @NotNull(message = "ID chi phí không được để trống!")
+//    private Integer expensesId;
 
+    @NotBlank(message = "dpivjdfkbjklfmnk")
     private String description;
 
     private Integer quantity = 0;

@@ -1,7 +1,9 @@
 package com.project.logistic_management.mapper.expenses;
 
 import com.project.logistic_management.dto.request.ExpensesDTO;
+import com.project.logistic_management.dto.request.ExpensesDetailDTO;
 import com.project.logistic_management.entity.Expenses;
+import com.project.logistic_management.entity.ExpensesDetail;
 import com.project.logistic_management.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +21,18 @@ public class ExpensesMapper extends BaseMapper {
                 .status(0)
                 .createdAt(new Date())
                 .updatedAt(new Date())
+                .build();
+    }
+
+    public ExpensesDetail toExpensesDetail(Integer expensesId, ExpensesDTO dto) {
+        if (dto == null) {
+            return null;
+        }
+        return ExpensesDetail.builder()
+                .expensesId(expensesId)
+                .description(dto.getDetails().getDescription())
+                .quantity(dto.getDetails().getQuantity())
+                .amount(dto.getDetails().getAmount())
                 .build();
     }
 
