@@ -1,13 +1,14 @@
 package com.project.logistic_management.service;
 
-import com.project.logistic_management.mapper.BaseMapper;
-import com.project.logistic_management.repository.BaseRepository;
+/*
+* R: Repository interface
+* M: Base mapper
+*/
+public class BaseService<R, M> {
+    protected R repository;
+    protected M mapper;
 
-public class BaseService {
-    protected BaseRepository repository;
-    protected BaseMapper mapper;
-
-    public BaseService(BaseRepository repo, BaseMapper mapper) {
+    public BaseService(R repo, M mapper) {
         this.repository = repo;
         this.mapper = mapper;
     }

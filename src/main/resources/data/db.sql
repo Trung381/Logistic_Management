@@ -12,7 +12,7 @@ CREATE TABLE `role` (
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO role (id, name, created_at, deleted_at)
+INSERT INTO role (id, name, created_at, updated_at)
 VALUES (1, "ADMIN", now(), now()),
 		(2, "ACCOUNTANT", now(), now()),
         (3, "MANAGER", now(), now()),
