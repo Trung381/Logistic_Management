@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -41,5 +42,18 @@ public class ScheduleRepoImpl extends BaseRepository implements ScheduleRepoCust
                 .where(qSchedule.id.eq(id))
                 .set(qSchedule.status, isApproved ? 1 : -1)
                 .execute();
+    }
+
+    @Override
+    public List<Integer> getSchedulesIdByDriverId(Integer id) {
+        QSchedule qSchedule = QSchedule.schedule;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qSchedule.driverId.eq(id));
+
+        return query.from(qSchedule)
+                .where(builder)
+                .select(qSchedule.id)
+                .fetch();
     }
 }

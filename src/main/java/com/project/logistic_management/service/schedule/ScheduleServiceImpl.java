@@ -8,6 +8,8 @@ import com.project.logistic_management.repository.schedule.ScheduleRepo;
 import com.project.logistic_management.service.BaseService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ScheduleServiceImpl extends BaseService<ScheduleRepo, ScheduleMapper> implements ScheduleService {
     public ScheduleServiceImpl(ScheduleRepo repository, ScheduleMapper mapper) {
@@ -40,5 +42,10 @@ public class ScheduleServiceImpl extends BaseService<ScheduleRepo, ScheduleMappe
 //            throw new
         }
         return "Duyệt lịch trình thành công!";
+    }
+
+    @Override
+    public List<Integer> getSchedulesIdByDriverId(Integer id) {
+        return repository.getSchedulesIdByDriverId(id);
     }
 }
