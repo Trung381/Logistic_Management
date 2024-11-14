@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface ScheduleRepo extends JpaRepository<Schedule, Integer>, ScheduleRepoCustom {
-    @Query("select s.id from Schedule s where s.driverId = :driverId")
-    List<Integer> getListID(@Param("driverId") Integer driverId);
 }
