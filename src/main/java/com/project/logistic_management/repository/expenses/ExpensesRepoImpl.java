@@ -1,20 +1,14 @@
 package com.project.logistic_management.repository.expenses;
 
-import com.project.logistic_management.dto.request.ExpensesDTO;
-import com.project.logistic_management.dto.request.ExpensesDetailDTO;
 import com.project.logistic_management.entity.Expenses;
-import com.project.logistic_management.entity.ExpensesDetail;
 import com.project.logistic_management.entity.QExpenses;
-import com.project.logistic_management.entity.QExpensesDetail;
 import com.project.logistic_management.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Projections;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ExpensesRepoImpl extends BaseRepository implements ExpensesRepoCustom {
@@ -25,9 +19,8 @@ public class ExpensesRepoImpl extends BaseRepository implements ExpensesRepoCust
     //Triển khai các hàm trong interface
 
     @Override
-    public List<ExpensesDTO> getExpenses(List<Integer> schedulesId) {
+    public List<Expenses> getExpenses(List<Integer> schedulesId) {
         QExpenses qExpenses = QExpenses.expenses;
-        QExpensesDetail qExpensesDetail = QExpensesDetail.expensesDetail;
 
         BooleanBuilder builder = new BooleanBuilder();
         if (schedulesId != null && !schedulesId.isEmpty()) {
@@ -35,12 +28,34 @@ public class ExpensesRepoImpl extends BaseRepository implements ExpensesRepoCust
         }
 
         return query.from(qExpenses)
-                .innerJoin(qExpensesDetail).on(qExpenses.id.eq(qExpensesDetail.expensesId))
                 .where(builder)
-                .select(Projections.fields(
-                        ExpensesDTO.class, qExpenses.scheduleId,
-                        Projections.fields(ExpensesDetailDTO.class, qExpensesDetail.description, qExpensesDetail.quantity, qExpensesDetail.amount).as("details"),
-                        qExpenses.totalAmount))
+                .select(qExpenses)
                 .fetch();
+    }
+
+    @Override
+    public List<Expenses> getExpensesByScheduleId(Integer id) {
+        QExpenses qExpenses = QExpenses.expenses;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qExpenses.scheduleId.eq(id));
+
+        return query.from(qExpenses)
+                .where(builder)
+                .select(qExpenses)
+                .fetch();
+    }
+
+    @Override
+    public Optional<Expenses> getExpensesById(Integer id) {
+        QExpenses qExpenses = QExpenses.expenses;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qExpenses.id.eq(id));
+        return Optional.ofNullable(query.from(qExpenses)
+                .where(builder)
+                .select(qExpenses)
+                .fetchOne()
+        );
     }
 }

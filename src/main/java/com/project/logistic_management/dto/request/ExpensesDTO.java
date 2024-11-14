@@ -1,12 +1,9 @@
 package com.project.logistic_management.dto.request;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -14,9 +11,9 @@ public class ExpensesDTO {
     @NotNull(message = "ID lịch trình không được để trống!")
     private Integer scheduleId;
 
-    @NotNull(message = "Thông tin chi tiết không được để trống!")
-    @Valid
-    private ExpensesDetailDTO details;
+    @NotBlank(message = "Mô tả chi phí không được để trống!")
+    private String description;
 
-    private Float totalAmount = 0f;
+    @NotNull(message = "Giá tiền không được để trống!")
+    private Float amount;
 }
