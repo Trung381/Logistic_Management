@@ -9,4 +9,5 @@ public class TruckRepoImpl extends BaseRepository implements TruckRepoCustom {
     public TruckRepoImpl(EntityManager entityManager) {
         super(entityManager);
     }
+
 }
