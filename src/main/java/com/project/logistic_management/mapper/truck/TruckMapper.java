@@ -1,8 +1,6 @@
 package com.project.logistic_management.mapper.truck;
 
-import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.dto.request.TruckDTO;
-import com.project.logistic_management.entity.Expenses;
 import com.project.logistic_management.entity.Truck;
 import com.project.logistic_management.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
@@ -19,6 +17,7 @@ public class TruckMapper extends BaseMapper {
                 .capacity(truckDTO.getCapacity())
                 .note(truckDTO.getNote())
                 .status(0)
+                .updatedAt(new Date())
                 .build();
     }
 
