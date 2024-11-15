@@ -21,7 +21,7 @@ public class ScheduleDTO {
 
     private String pathAttachDocument;
 
-    @NotEmpty(message = "Thời gian xuất phát không được để trống!")
+    @NotNull(message = "Thời gian xuất phát không được để trống!")
     private Date departureTime;
 
     private Date arrivalTime;

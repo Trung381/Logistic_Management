@@ -56,4 +56,28 @@ public class ScheduleRepoImpl extends BaseRepository implements ScheduleRepoCust
                 .select(qSchedule.id)
                 .fetch();
     }
+
+    @Override
+    public List<Schedule> getSchedules() {
+        QSchedule qSchedule = QSchedule.schedule;
+
+        return query.from(qSchedule)
+                .select(qSchedule)
+                .fetch();
+    }
+
+    @Override
+    public Optional<Schedule> getScheduleByDriverId(Integer id) {
+        QSchedule qSchedule = QSchedule.schedule;
+
+        BooleanBuilder builder = new BooleanBuilder()
+                .and(qSchedule.driverId.eq(id));
+
+        return Optional.ofNullable(
+                query.from(qSchedule)
+                        .where(builder)
+                        .select(qSchedule)
+                        .fetchOne()
+        );
+    }
 }

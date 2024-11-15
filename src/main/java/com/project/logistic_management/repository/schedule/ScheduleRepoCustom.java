@@ -9,4 +9,6 @@ public interface ScheduleRepoCustom {
     Optional<Schedule> getScheduleById(Integer id);
     long approveSchedule(Integer id, boolean isApproved);
     List<Integer> getSchedulesIdByDriverId(Integer id);
+    List<Schedule> getSchedules();
+    Optional<Schedule> getScheduleByDriverId(Integer id);
 }

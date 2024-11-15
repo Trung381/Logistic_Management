@@ -34,7 +34,7 @@ public class ScheduleMapper extends BaseMapper {
         }
         schedule.setScheduleConfigId(dto.getScheduleConfigId());
         schedule.setTruckId(dto.getTruckId());
-        schedule.setDriverId(dto.getTruckId());
+        schedule.setDriverId(dto.getDriverId());
         schedule.setPathAttachDocument(dto.getPathAttachDocument());
         schedule.setDepartureTime(dto.getDepartureTime());
         schedule.setArrivalTime(dto.getArrivalTime());

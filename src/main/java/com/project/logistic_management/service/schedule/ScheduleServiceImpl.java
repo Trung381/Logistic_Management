@@ -48,4 +48,21 @@ public class ScheduleServiceImpl extends BaseService<ScheduleRepo, ScheduleMappe
     public List<Integer> getSchedulesIdByDriverId(Integer id) {
         return repository.getSchedulesIdByDriverId(id);
     }
+
+    @Override
+    public Schedule getScheduleById(Integer id) {
+        return repository.getScheduleById(id)
+            .orElseThrow(() -> new NotFoundException("Không tìm thấy thông tin lịch trình!"));
+    }
+
+    @Override
+    public List<Schedule> getSchedules() {
+        return repository.getSchedules();
+    }
+
+    @Override
+    public Schedule getScheduleByDriverId(Integer id) {
+        return repository.getScheduleByDriverId(id)
+            .orElseThrow(() -> new NotFoundException("Không tìm thấy thông tin lịch trình!"));
+    }
 }
