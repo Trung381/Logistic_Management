@@ -48,4 +48,3 @@ out/
 ### env ###
 .env
 .env[.properties]
-/build

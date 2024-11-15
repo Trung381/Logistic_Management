@@ -1,9 +1,7 @@
 package com.project.logistic_management.mapper.expenses;
 
 import com.project.logistic_management.dto.request.ExpensesDTO;
-import com.project.logistic_management.dto.request.ExpensesDetailDTO;
 import com.project.logistic_management.entity.Expenses;
-import com.project.logistic_management.entity.ExpensesDetail;
 import com.project.logistic_management.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 
@@ -17,22 +15,10 @@ public class ExpensesMapper extends BaseMapper {
         }
         return Expenses.builder()
                 .scheduleId(dto.getScheduleId())
-                .totalAmount(dto.getTotalAmount())
-                .status(0)
+                .description(dto.getDescription())
+                .amount(dto.getAmount())
                 .createdAt(new Date())
                 .updatedAt(new Date())
-                .build();
-    }
-
-    public ExpensesDetail toExpensesDetail(Integer expensesId, ExpensesDTO dto) {
-        if (dto == null) {
-            return null;
-        }
-        return ExpensesDetail.builder()
-                .expensesId(expensesId)
-                .description(dto.getDetails().getDescription())
-                .quantity(dto.getDetails().getQuantity())
-                .amount(dto.getDetails().getAmount())
                 .build();
     }
 
@@ -41,7 +27,8 @@ public class ExpensesMapper extends BaseMapper {
             return;
         }
         expenses.setScheduleId(dto.getScheduleId());
-        expenses.setTotalAmount(dto.getTotalAmount());
+        expenses.setDescription(dto.getDescription());
+        expenses.setAmount(dto.getAmount());
         expenses.setUpdatedAt(new Date());
     }
 }

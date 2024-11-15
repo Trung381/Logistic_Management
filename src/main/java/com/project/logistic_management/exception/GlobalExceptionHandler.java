@@ -24,15 +24,6 @@ public class GlobalExceptionHandler {
         );
     }
 
-//    @ExceptionHandler(value = AuthenticationException.class)
-//    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException e) {
-//        log.warn("An unauthorized user is trying to log in");
-//        return new ResponseEntity<>(
-//                BaseResponse.fail("Tên đăng nhập hoặc mật khẩu không đúng!"),
-//                HttpStatus.UNAUTHORIZED
-//        );
-//    }
-
     @ExceptionHandler(value = NotFoundException.class)
     public ResponseEntity<Object> handleNotFoundException (NotFoundException e) {
         return new ResponseEntity<>(
@@ -58,9 +49,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BaseResponse<String>> handleIllegalArgumentException(IllegalArgumentException ex) {
         return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<BaseResponse<String>> handleGenericException(Exception ex) {
-//        return new ResponseEntity<>(BaseResponse.fail("Đã xảy ra lỗi không mong muốn."), HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
 }

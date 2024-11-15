@@ -72,17 +72,6 @@ public class JwtFilter extends OncePerRequestFilter {
             response.getWriter().write(jsonResponse);
             return;
         }
-//        catch (ForbiddenException e) {
-//            response.setStatus(403);
-//            response.setContentType("application/json");
-//
-//            String jsonResponse = (new ObjectMapper()).writeValueAsString(
-//                    BaseResponse.fail(e.getMessage())
-//            );
-//
-//            response.getWriter().write(jsonResponse);
-//            return;
-//        }
         filterChain.doFilter(request, response);
     }
 }

@@ -1,13 +1,5 @@
 package com.project.logistic_management.mapper.role;
 
-//    public RoleDTO toDTO(Role role) {
-//        RoleDTO roleDto = new RoleDTO();
-//        roleDto.setId(role.getId());
-//        roleDto.setName(role.getName());
-//        return roleDto;
-//    }
-
-
 import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.dto.request.RoleDTO;
 import com.project.logistic_management.dto.request.UserDTO;
