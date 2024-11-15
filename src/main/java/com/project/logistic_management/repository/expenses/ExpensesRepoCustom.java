@@ -1,5 +1,6 @@
 package com.project.logistic_management.repository.expenses;
 
+import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.entity.Expenses;
 
 import java.util.List;
