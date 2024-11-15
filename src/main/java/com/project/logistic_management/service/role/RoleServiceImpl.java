@@ -2,11 +2,13 @@ package com.project.logistic_management.service.role;
 
 
 import com.project.logistic_management.dto.request.RoleDTO;
+import com.project.logistic_management.dto.request.RolePermissionDTO;
 import com.project.logistic_management.entity.Role;
 import com.project.logistic_management.enums.PermissionKey;
 import com.project.logistic_management.exception.def.NotFoundException;
 import com.project.logistic_management.mapper.role.RoleMapper;
 import com.project.logistic_management.repository.role.RoleRepo;
+import com.project.logistic_management.repository.rolePermission.RolePermissionRepo;
 import com.project.logistic_management.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class RoleServiceImpl extends BaseService<RoleRepo, RoleMapper> implement
         Role role = mapper.toRole(roleDto);
         return repository.save(role);
     }
+    @Autowired
+    private RolePermissionRepo rolePermissionRepo;
 
     @Override
     public Role updateRole(Integer id, RoleDTO roleDto) {
@@ -65,4 +69,7 @@ public class RoleServiceImpl extends BaseService<RoleRepo, RoleMapper> implement
         return checkPermission(permissionName, key);
     }
 
+    public List<RolePermissionDTO> getAllPermissionOfRole(){
+        return rolePermissionRepo.fetchRolePermissions();
+    }
 }

@@ -1,6 +1,7 @@
 package com.project.logistic_management.controller;
 
 import com.project.logistic_management.dto.request.RoleDTO;
+import com.project.logistic_management.dto.request.RolePermissionDTO;
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.entity.Role;
 
@@ -68,5 +69,10 @@ public class RoleController {
     @PostMapping("/check-permission")
     public ResponseEntity<BaseResponse<Boolean>> checkPermisson(@RequestParam String permissionName, @RequestParam PermissionKey key){
         return ResponseEntity.ok(BaseResponse.ok(roleService.hasPermission(permissionName, key)));
+    }
+
+    @GetMapping("/get-permissions-role")
+    public ResponseEntity<BaseResponse<List<RolePermissionDTO>>> getPermissionsOfRole(){
+        return ResponseEntity.ok(BaseResponse.ok(roleService.getAllPermissionOfRole()));
     }
 }
