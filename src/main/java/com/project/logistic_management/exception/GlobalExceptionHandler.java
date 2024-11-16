@@ -5,6 +5,7 @@ import com.project.logistic_management.exception.def.ConflictException;
 import com.project.logistic_management.exception.def.ForbiddenException;
 import com.project.logistic_management.exception.def.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -51,8 +52,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<BaseResponse<String>> handleIllegalArgumentException(ForbiddenException ex) {
         return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.FORBIDDEN);
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<BaseResponse<?>> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        return new ResponseEntity<>(
+                BaseResponse.fail(e.getMessage()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 }

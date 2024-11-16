@@ -1,6 +1,5 @@
 package com.project.logistic_management.repository.expenses;
 
-import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.entity.Expenses;
 
 import java.util.List;
@@ -11,4 +10,5 @@ public interface ExpensesRepoCustom {
     List<Expenses> getExpenses(List<Integer> schedulesId);
     List<Expenses> getExpensesByScheduleId(Integer id);
     Optional<Expenses> getExpensesById(Integer id);
+    long approveExpenses(Integer id);
 }

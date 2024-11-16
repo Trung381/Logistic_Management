@@ -1,6 +1,5 @@
 package com.project.logistic_management.controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.service.expenses.ExpensesService;
@@ -38,10 +37,24 @@ public class ExpensesController {
         );
     }
 
+    @GetMapping("/expenses_of_schedule/{id}")
+    public ResponseEntity<Object> getExpensesByScheduleId(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(expensesService.getExpensesByScheduleId(id))
+        );
+    }
+
     @PostMapping("/update/{id}")
     public ResponseEntity<Object> updateExpenses(@PathVariable Integer id, @Valid @RequestBody ExpensesDTO dto) {
         return ResponseEntity.ok(
                 BaseResponse.ok(expensesService.updateExpenses(id, dto))
+        );
+    }
+
+    @GetMapping("/approve_expenses/{id}")
+    public ResponseEntity<Object> approveExpenses(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(expensesService.approveExpenses(id))
         );
     }
 }
