@@ -40,38 +40,5 @@ public class RoleRepoImpl extends BaseRepository implements RoleRepoCustom {
         query.delete(qRole).where(qRole.id.eq(id));
     }
 
-    public boolean hasPermission(Integer roleId, String permissionName, PermissionKey key) {
-        QRolePermission qRolePermission = QRolePermission.rolePermission;
-        QPermission qPermission = QPermission.permission;
 
-        BooleanBuilder builder = new BooleanBuilder()
-                .and(qRolePermission.roleId.eq(roleId))
-                .and(qPermission.name.eq(permissionName));
-
-        if (key != null){
-            switch(key){
-                case READ:
-                    builder.and(qRolePermission.canView.eq(true));
-                    break;
-                case CREATE:
-                    builder.and(qRolePermission.canWrite.eq(true));
-                    break;
-                case APPROVE:
-                    builder.and(qRolePermission.canApprove.eq(true));
-                    break;
-                case DELETE:
-                    builder.and(qRolePermission.canDelete.eq(true));
-                    break;
-            }
-        }
-
-        Long count = query
-                .select(qRolePermission.id.count())
-                .from(qRolePermission)
-                .innerJoin(qPermission).on(qRolePermission.permissionId.eq(qPermission.id))
-                .where(builder)
-                .fetchOne();
-
-        return count != null && count > 0;
-    }
 }

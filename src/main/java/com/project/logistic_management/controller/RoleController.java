@@ -1,8 +1,11 @@
 package com.project.logistic_management.controller;
 
 import com.project.logistic_management.dto.request.RoleDTO;
-import com.project.logistic_management.dto.request.RolePermissionDTO;
+import com.project.logistic_management.dto.request.UpdateRolePermissionRequest;
+import com.project.logistic_management.dto.response.PermissionDetail;
+import com.project.logistic_management.dto.response.RolePermissionResponse;
 import com.project.logistic_management.dto.response.BaseResponse;
+import com.project.logistic_management.dto.response.RoleWithPermissionsResponse;
 import com.project.logistic_management.entity.Role;
 
 import com.project.logistic_management.enums.PermissionKey;
@@ -50,29 +53,10 @@ public class RoleController {
         return ResponseEntity.ok(BaseResponse.ok(role));
     }
 
-//    @GetMapping("/{id}/users")
-//    public ResponseEntity<BaseResponse<RoleDTO>> getRoleWithUsers(@PathVariable Integer id) {
-//        RoleDTO roleDto = roleService.getRoleWithUsers(id);
-//        if (roleDto != null) {
-//            return ResponseEntity.ok(BaseResponse.ok(roleDto));
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponse.fail("Role not found with ID: " + id));
-//        }
-//    }
 
     @GetMapping("/delete/{id}")
     public ResponseEntity<BaseResponse<Void>> deleteRoleById(@PathVariable Integer id) {
         roleService.deleteRoleById(id);
         return ResponseEntity.ok(BaseResponse.ok(null));
-    }
-
-    @PostMapping("/check-permission")
-    public ResponseEntity<BaseResponse<Boolean>> checkPermisson(@RequestParam String permissionName, @RequestParam PermissionKey key){
-        return ResponseEntity.ok(BaseResponse.ok(roleService.hasPermission(permissionName, key)));
-    }
-
-    @GetMapping("/get-permissions-role")
-    public ResponseEntity<BaseResponse<List<RolePermissionDTO>>> getPermissionsOfRole(){
-        return ResponseEntity.ok(BaseResponse.ok(roleService.getAllPermissionOfRole()));
     }
 }

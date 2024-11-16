@@ -1,29 +1,37 @@
 package com.project.logistic_management.repository.rolePermission;
 
-import com.project.logistic_management.dto.request.RolePermissionDTO;
+import com.project.logistic_management.dto.response.RolePermissionResponse;
 import com.project.logistic_management.entity.QPermission;
 import com.project.logistic_management.entity.QRole;
 import com.project.logistic_management.entity.QRolePermission;
+import com.project.logistic_management.enums.PermissionKey;
 import com.project.logistic_management.repository.BaseRepository;
-import com.project.logistic_management.repository.role.RoleRepoCustom;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class RolePermissionRepoImpl extends BaseRepository implements RolePermissionRepoCustom {
     public RolePermissionRepoImpl(EntityManager entityManager) {
         super(entityManager);
     }
 
     @Override
-    public List<RolePermissionDTO> fetchRolePermissions() {
+    public List<RolePermissionResponse> fetchRolePermissions() {
         QRole role = QRole.role;
         QRolePermission rolePermission = QRolePermission.rolePermission;
         QPermission permission = QPermission.permission;
 
         return query
-                .select(Projections.constructor(RolePermissionDTO.class,
+                .select(Projections.constructor(RolePermissionResponse.class,
                         role.id.as("roleId"),
                         role.name.as("roleName"),
                         permission.id.as("permissionId"),
@@ -39,5 +47,57 @@ public class RolePermissionRepoImpl extends BaseRepository implements RolePermis
                 .innerJoin(rolePermission).on(role.id.eq(rolePermission.roleId))
                 .innerJoin(permission).on(rolePermission.permissionId.eq(permission.id))
                 .fetch();
+    }
+
+    @Override
+    public boolean hasPermission(Integer roleId, String permissionName, PermissionKey key) {
+        QRolePermission qRolePermission = QRolePermission.rolePermission;
+        QPermission qPermission = QPermission.permission;
+
+        BooleanBuilder builder = new BooleanBuilder()
+                .and(qRolePermission.roleId.eq(roleId))
+                .and(qPermission.name.eq(permissionName));
+
+        if (key != null){
+            switch(key){
+                case READ:
+                    builder.and(qRolePermission.canView.eq(true));
+                    break;
+                case CREATE:
+                    builder.and(qRolePermission.canWrite.eq(true));
+                    break;
+                case APPROVE:
+                    builder.and(qRolePermission.canApprove.eq(true));
+                    break;
+                case DELETE:
+                    builder.and(qRolePermission.canDelete.eq(true));
+                    break;
+            }
+        }
+
+        Long count = query
+                .select(qRolePermission.id.count())
+                .from(qRolePermission)
+                .innerJoin(qPermission).on(qRolePermission.permissionId.eq(qPermission.id))
+                .where(builder)
+                .fetchOne();
+
+        return count != null && count > 0;
+    }
+
+    @Override
+    @Transactional
+    public long changePermissionByRoleId(Integer roleId, Integer permissionId, List<Path<?>> paths, List<?> values) {
+        QRolePermission qRolePermission = QRolePermission.rolePermission;
+
+        BooleanBuilder builder = new BooleanBuilder()
+                .and(qRolePermission.roleId.eq(roleId))
+                .and(qRolePermission.permissionId.eq(permissionId));
+
+        return query.update(qRolePermission)
+                .where(builder)
+                .set(paths, values)
+                .set(qRolePermission.updatedAt, new Date())
+                .execute();
     }
 }
