@@ -3,7 +3,7 @@ package com.project.logistic_management.service;
 import com.project.logistic_management.entity.User;
 import com.project.logistic_management.enums.PermissionKey;
 import com.project.logistic_management.exception.def.ForbiddenException;
-import com.project.logistic_management.repository.role.RoleRepo;
+import com.project.logistic_management.repository.rolePermission.RolePermissionRepo;
 import com.project.logistic_management.repository.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class BaseService<R, M> {
     @Autowired
     UserRepo userRepository;
     @Autowired
-    RoleRepo roleRepo;
+    RolePermissionRepo rolePermissonRepo;
 
     protected User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -41,7 +41,7 @@ public class BaseService<R, M> {
 
     protected boolean checkPermission(String permission, PermissionKey key) {
         User user = getCurrentUser();
-        if (!roleRepo.hasPermission(user.getRoleId(), permission, key)) {
+        if (!rolePermissonRepo.hasPermission(user.getRoleId(), permission, key)) {
             throw new ForbiddenException("Huh, no permission to access :)");
         }
         return true;
