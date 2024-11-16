@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.YearMonth;
 import java.util.Date;
 
 @Getter
@@ -25,7 +26,7 @@ public class Salary {
     private Float basicSalary;
 
     @Column(name = "period")
-    private String period;
+    private YearMonth period;
 
     @Column(name = "status")
     private Integer status;
