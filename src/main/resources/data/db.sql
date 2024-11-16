@@ -187,7 +187,7 @@ CREATE TABLE `salary` (
   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến người dùng",
   `allowance` FLOAT DEFAULT 0 COMMENT "Tiền phụ cấp",
   `basic_salary` FLOAT DEFAULT 0 COMMENT "Lương cơ bản",
-  `period` VARCHAR(255) NOT NULL COMMENT "Chu kỳ thanh toán lương",
+  `period` VARCHAR(7) NOT NULL COMMENT "Chu kỳ thanh toán lương, format: YYYY-MM",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái: 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
@@ -234,6 +234,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE `expenses` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `schedule_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến lịch trình",
+  `description` TEXT NOT NULL COMMENT "Mô tả chi phí",
   `amount` FLOAT NOT NULL DEFAULT 0 COMMENT "Giá tiền",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
