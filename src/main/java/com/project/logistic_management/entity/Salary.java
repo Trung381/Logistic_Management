@@ -1,6 +1,7 @@
 package com.project.logistic_management.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,8 +26,11 @@ public class Salary {
     @Column(name = "basic_salary")
     private Float basicSalary;
 
+    @Column(name = "advance")
+    private Float advance;
+
     @Column(name = "period")
-    private YearMonth period;
+    private String period; //YYYY-MM
 
     @Column(name = "status")
     private Integer status;

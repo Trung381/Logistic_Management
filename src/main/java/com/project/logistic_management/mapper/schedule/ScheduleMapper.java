@@ -21,8 +21,8 @@ public class ScheduleMapper extends BaseMapper {
                 .pathAttachDocument(dto.getPathAttachDocument())
                 .departureTime(dto.getDepartureTime())
                 .arrivalTime(dto.getArrivalTime())
-                .status(dto.getStatus())
-                .expensesStatus(dto.getExpansesStatus())
+                .status(0)
+                .expensesStatus(0)
                 .createdAt(new Date())
                 .updatedAt(new Date())
                 .build();
