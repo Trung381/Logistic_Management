@@ -171,7 +171,8 @@ CREATE TABLE `schedule` (
   `departure_time` TIMESTAMP NOT NULL COMMENT "Thời gian khởi hành",
   `arrival_time` TIMESTAMP COMMENT "Thời gian hoàn thành",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái lịch trình: -1 - Không duyệt, 0 - Đang chờ, 1 - Đã duyệt và chưa hoàn thành, 2 - Đã hoàn thành",
-  `expenses_status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái thanh toán chi phí: 0 - Chưa thanh toán, 1 - Đã thanh toán",
+  `total_expenses` FLOAT DEFAULT 0 COMMENT "Tổng chi phí phát sinh",
+  `expenses_status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái thanh toán chi phí phát sinh: 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
   PRIMARY KEY (`id`),
@@ -187,6 +188,7 @@ CREATE TABLE `salary` (
   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến người dùng",
   `allowance` FLOAT DEFAULT 0 COMMENT "Tiền phụ cấp",
   `basic_salary` FLOAT DEFAULT 0 COMMENT "Lương cơ bản",
+  `advance` FLOAT DEFAULT 0 COMMENT "Tiền tạm ứng",
   `period` VARCHAR(7) NOT NULL COMMENT "Chu kỳ thanh toán lương, format: YYYY-MM",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái: 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
@@ -196,6 +198,11 @@ CREATE TABLE `salary` (
 ) ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+INSERT INTO salary (id, user_id, allowance, basic_salary, period, status, created_at, updated_at)
+VALUES (1, 1, 2000000, 10000000, "2024-11", 0, now(), now()),
+		(2, 2, 3000000, 8000000, "2024-11", 0, now(), now()),
+        (3, 1, 2000000, 10000000, "2023-10", 1, now(), now());
 
 CREATE TABLE `outbound_transaction_detail` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -211,20 +218,20 @@ CREATE TABLE `outbound_transaction_detail` (
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE `advance_payment_detail` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến user",
-  `advance_payment` FLOAT DEFAULT 0 COMMENT "Tiền ứng",
-  `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái ứng tiền: -1 - Không duyệt, 0 - Chờ duyệt, 1 - Đã duyệt",
-  `period` VARCHAR(255) NOT NULL COMMENT "Chu kỳ lương",
-  `reason` TEXT NOT NULL COMMENT "Lý do ứng lương",
-  `created_at` TIMESTAMP NOT NULL DEFAULT now(),
-  `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-) ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+-- CREATE TABLE `advance_payment_detail` (
+--   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến user",
+--   `advance_payment` FLOAT DEFAULT 0 COMMENT "Tiền ứng",
+--   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái ứng tiền: -1 - Không duyệt, 0 - Chờ duyệt, 1 - Đã duyệt",
+--   `period` VARCHAR(255) NOT NULL COMMENT "Chu kỳ lương",
+--   `reason` TEXT NOT NULL COMMENT "Lý do ứng lương",
+--   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
+--   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
+--   PRIMARY KEY (`id`),
+--   FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+-- ) ENGINE = InnoDB
+-- DEFAULT CHARSET = utf8mb4
+-- COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE `expenses` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -238,3 +245,51 @@ CREATE TABLE `expenses` (
 ) ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
+
+insert into expenses (id, schedule_id, amount, description, created_at, updated_at)
+values (2, 3, 1000000, "qqqqqqqq", now(), now());
+
+insert into expenses (id, schedule_id, amount, description, created_at, updated_at)
+values (3, 3, 3000000, "qqqqqqqq", now(), now());
+
+insert into schedule (id, schedule_config_id, truck_id, driver_id, path_attach_document, departure_time, arrival_time, status, expenses_status, created_at, updated_at)
+values (2, 2, 1, 2, null, now(), null, 1, 1, now(), now()),
+		(3, 2, 1, 3, null, now(), null, 1, 1, now(), now()),
+        (4, 3, 1, 3, null, now(), null, 1, 1, now(), now()),
+        (5, 2, 1, 4, null, now(), null, 1, 1, now(), now());
+        
+
+insert into user (id, username, password, role_id, status, created_at, updated_at)
+values (3, "driver2", "p2", 4, 1, now(), now()),
+		(4, "driver3", "p3", 4, 1, now(), now());
+
+-- Chi tiết lương
+select
+	s.user_id, u.username, u.role_id,
+    s.basic_salary, s.allowance, s.advance,
+    (select coalesce(sum(commission), 0) from schedule sch, schedule_config sc
+		where sch.schedule_config_id = sc.id and sch.driver_id = s.user_id)
+        as totalCommission,
+	(select coalesce(sum(amount), 0) from schedule sch, expenses e 
+		where sch.id = e.schedule_id and sch.driver_id = s.user_id)
+        as totalExpenses
+from salary s
+left join user u on s.user_id = u.id
+where s.period < "2025-01" and s.period > "2024-01";
+
+-- Tổng quan tiền lương
+select
+    u.role_id,
+    count(s.user_id) as numberOfUser,
+    sum(basic_salary) as totalBasicSalary,
+    sum(allowance) as totalAllowance,
+    (select sum(commission) from schedule_config sc, schedule sch 
+		where sc.id = sch.schedule_config_id and sch.driver_id = s.user_id)
+        as totalCommission,
+    (select sum(total_expenses) from schedule sch 
+		where sch.driver_id = s.user_id) as totalExpenses,
+    sum(advance) as totalAdvance
+from salary s
+left join user u on s.user_id = u.id
+where s.period < "2025-01" and s.period > "2024-01"
+group by u.role_id, s.user_id;
