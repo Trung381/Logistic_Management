@@ -17,6 +17,7 @@ public class OutboundTransactionMapper extends BaseMapper {
                 .scheduleId(outboundDTO.getScheduleId())
                 .status(0)
                 .createdAt(new Date())
+                .updatedAt(new Date())
                 .build();
     }
 

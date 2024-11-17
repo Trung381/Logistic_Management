@@ -139,6 +139,9 @@ CREATE TABLE `truck` (
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+insert into truck (id, license_plate, capacity, note, status, created_at, updated_at)
+values (2, "BBBBBBBBBB", 20, "Chiec xe tai de test 2", 1, now(), now());
+
 CREATE TABLE `schedule_config` (
   `id` INT UNSIGNED AUTO_INCREMENT,
   `place_a` VARCHAR(255) NOT NULL,
@@ -166,7 +169,7 @@ CREATE TABLE `schedule` (
   `driver_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến người dùng - Tài xế lái xe",
   `path_attach_document` VARCHAR(255) COMMENT "Đường dẫn lưu tài liệu bổ sung",
   `departure_time` TIMESTAMP NOT NULL COMMENT "Thời gian khởi hành",
-  `arrival_time` TIMESTAMP NOT NULL COMMENT "Thời gian hoàn thành",
+  `arrival_time` TIMESTAMP COMMENT "Thời gian hoàn thành",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái lịch trình: -1 - Không duyệt, 0 - Đang chờ, 1 - Đã duyệt và chưa hoàn thành, 2 - Đã hoàn thành",
   `expenses_status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái thanh toán chi phí: 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),

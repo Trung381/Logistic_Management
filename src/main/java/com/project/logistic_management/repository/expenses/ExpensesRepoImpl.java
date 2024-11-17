@@ -2,9 +2,12 @@ package com.project.logistic_management.repository.expenses;
 
 import com.project.logistic_management.entity.Expenses;
 import com.project.logistic_management.entity.QExpenses;
+import com.project.logistic_management.entity.QSchedule;
 import com.project.logistic_management.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,5 +60,27 @@ public class ExpensesRepoImpl extends BaseRepository implements ExpensesRepoCust
                 .select(qExpenses)
                 .fetchOne()
         );
+    }
+
+    @Override
+    @Modifying
+    @Transactional
+    public long approveExpenses(Integer id) {
+        QSchedule qSchedule = QSchedule.schedule;
+        QExpenses qExpenses = QExpenses.expenses;
+
+        Integer scheduleId = query.from(qExpenses)
+                .where(qExpenses.id.eq(id))
+                .select(qExpenses.scheduleId)
+                .fetchOne();
+
+        if (scheduleId == null) {
+            return 0;
+        }
+
+        return query.update(qSchedule)
+                .where(qSchedule.id.eq(scheduleId))
+                .set(qSchedule.expensesStatus, 1)
+                .execute();
     }
 }

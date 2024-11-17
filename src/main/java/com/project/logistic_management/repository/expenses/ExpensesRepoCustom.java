@@ -10,4 +10,5 @@ public interface ExpensesRepoCustom {
     List<Expenses> getExpenses(List<Integer> schedulesId);
     List<Expenses> getExpensesByScheduleId(Integer id);
     Optional<Expenses> getExpensesById(Integer id);
+    long approveExpenses(Integer id);
 }
