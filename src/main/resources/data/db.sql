@@ -187,6 +187,7 @@ CREATE TABLE `salary` (
   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến người dùng",
   `allowance` FLOAT DEFAULT 0 COMMENT "Tiền phụ cấp",
   `basic_salary` FLOAT DEFAULT 0 COMMENT "Lương cơ bản",
+  `advance` FLOAT DEFAULT 0 COMMENT "Tiền tạm ứng",
   `period` VARCHAR(255) NOT NULL COMMENT "Chu kỳ thanh toán lương",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái: 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
@@ -211,20 +212,20 @@ CREATE TABLE `outbound_transaction_detail` (
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE `advance_payment_detail` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến user",
-  `advance_payment` FLOAT DEFAULT 0 COMMENT "Tiền ứng",
-  `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái ứng tiền: -1 - Không duyệt, 0 - Chờ duyệt, 1 - Đã duyệt",
-  `period` VARCHAR(255) NOT NULL COMMENT "Chu kỳ lương",
-  `reason` TEXT NOT NULL COMMENT "Lý do ứng lương",
-  `created_at` TIMESTAMP NOT NULL DEFAULT now(),
-  `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
-) ENGINE = InnoDB
-DEFAULT CHARSET = utf8mb4
-COLLATE = utf8mb4_0900_ai_ci;
+-- CREATE TABLE `advance_payment_detail` (
+--   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+--   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến user",
+--   `advance_payment` FLOAT DEFAULT 0 COMMENT "Tiền ứng",
+--   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái ứng tiền: -1 - Không duyệt, 0 - Chờ duyệt, 1 - Đã duyệt",
+--   `period` VARCHAR(255) NOT NULL COMMENT "Chu kỳ lương",
+--   `reason` TEXT NOT NULL COMMENT "Lý do ứng lương",
+--   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
+--   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
+--   PRIMARY KEY (`id`),
+--   FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+-- ) ENGINE = InnoDB
+-- DEFAULT CHARSET = utf8mb4
+-- COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE `expenses` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
