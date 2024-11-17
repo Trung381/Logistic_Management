@@ -115,7 +115,7 @@ CREATE TABLE `outbound_transaction` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến người dùng - Người chịu trách nhiệm",
   `schedule_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến lịch trình",
-  `approved_time` TIMESTAMP NOT NULL COMMENT "Thời gian duyệt",
+  `approved_time` TIMESTAMP COMMENT "Thời gian duyệt",
   `total_amount` FLOAT NOT NULL DEFAULT 0 COMMENT "Tổng tiền giao dịch",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái giao dịch: (-1) - Không duyệt, 0 - Chờ duyệt, 1 - Đã duyệt, 2 - Đã hoàn thành",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
