@@ -56,6 +56,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<BaseResponse<String>> handleIllegalArgumentException(ForbiddenException ex) {
         return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.FORBIDDEN);
+    }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<BaseResponse<?>> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
