@@ -1,6 +1,5 @@
 package com.project.logistic_management.controller;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.service.expenses.ExpensesService;
