@@ -248,6 +248,14 @@ COLLATE = utf8mb4_0900_ai_ci;
 insert into expenses (id, schedule_id, amount, description, created_at, updated_at)
 values (2, 3, 1000000, "qqqqqqqq", now(), now());
 
+select * from expenses e, schedule s where e.schedule_id = 3 and e.schedule_id = s.id;
+select * from schedule;
+
+select * from salary s
+left join user u on s.user_id = u.id
+left join schedule sch on sch.driver_id = s.user_id
+left join expenses e on e.schedule_id = sch.id;
+
 insert into expenses (id, schedule_id, amount, description, created_at, updated_at)
 values (3, 3, 3000000, "qqqqqqqq", now(), now());
 
@@ -279,16 +287,75 @@ where s.period < "2025-01" and s.period > "2024-01";
 -- Tổng quan tiền lương
 select
     u.role_id,
-    count(s.user_id) as numberOfUser,
+    count(distinct s.user_id) as numberOfUser,
     sum(basic_salary) as totalBasicSalary,
     sum(allowance) as totalAllowance,
     (select sum(commission) from schedule_config sc, schedule sch
 		where sc.id = sch.schedule_config_id and sch.driver_id = s.user_id)
         as totalCommission,
-    (select sum(total_expenses) from schedule sch
-		where sch.driver_id = s.user_id) as totalExpenses,
+    sum(
+		(select coalesce(sum(amount), 0) from schedule sch, expenses e
+		where sch.id = e.schedule_id and sch.driver_id = s.user_id)
+	) as totalExpenses,
     sum(advance) as totalAdvance
 from salary s
 left join user u on s.user_id = u.id
 where s.period < "2025-01" and s.period > "2024-01"
 group by u.role_id, s.user_id;
+
+SELECT
+    u.role_id,
+    COUNT(s.user_id) AS numberOfUser, -- Đếm số lượng người dùng duy nhất
+    SUM(s.basic_salary) AS totalBasicSalary, -- Tổng basic_salary
+    SUM(s.allowance) AS totalAllowance, -- Tổng allowance
+    (
+        SELECT SUM(sc.commission)
+        FROM schedule_config sc
+        JOIN schedule sch ON sc.id = sch.schedule_config_id
+        WHERE sch.driver_id IN (
+            SELECT s1.user_id
+            FROM salary s1
+            JOIN user u1 ON s1.user_id = u1.id
+            WHERE s1.period < "2025-01"
+              AND s1.period > "2024-01"
+              AND u1.role_id = u.role_id
+        )
+    ) AS totalCommission, -- Tổng commission theo role_id
+    (
+        SELECT SUM(e.amount)
+        FROM schedule sch
+        JOIN expenses e ON sch.id = e.schedule_id
+        WHERE sch.driver_id IN (
+            SELECT s1.user_id
+            FROM salary s1
+            JOIN user u1 ON s1.user_id = u1.id
+            WHERE s1.period < "2025-01"
+              AND s1.period > "2024-01"
+              AND u1.role_id = u.role_id
+        )
+    ) AS totalExpenses, -- Tổng amount từ bảng expenses theo role_id
+    SUM(s.advance) AS totalAdvance -- Tổng advance
+FROM salary s
+LEFT JOIN user u ON s.user_id = u.id
+WHERE s.period < "2025-01" AND s.period > "2024-01"
+GROUP BY u.role_id;
+
+select
+   *
+from salary s
+left join user u on s.user_id = u.id
+left join schedule sch on sch.driver_id = u.id
+left join schedule_config sc on sch.schedule_config_id = sc.id
+left join expenses e on e.schedule_id = sch.id
+where s.period < "2025-01" and s.period > "2024-01";
+
+select * from salary s
+left join user u on s.user_id = u.id
+where u.role_id = 4;
+
+select * from expenses e, schedule s
+where e.schedule_id = s.id and s.driver_id = 3;
+select * from salary where id = 2;
+
+insert into salary (id, user_id, allowance, basic_salary, advance, period, status, created_at, updated_at)
+values (4, 3, 1000000, 5000000, 0, "2024-11", 0, now(), now());
