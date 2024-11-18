@@ -12,7 +12,6 @@ public interface ReportService {
     TruckExpensesReportDTO getTruckExpensesReport(Integer truckId, Date startTime, Date endTime);
     List<TruckExpensesReportDTO> getAllTruckExpensesReport(Date startTime, Date endTime);
     List<TruckExpenseSummaryDTO> getAllTrucksExpenseSummary(Date startTime, Date endTime);
-
     List<?> exportSalarySummaryReport(String begin, String end);
     List<?> exportSalaryDetailReport(String begin, String end);
 }
