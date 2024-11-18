@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/reports")
@@ -52,5 +57,19 @@ public class ReportController {
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endTime) {
 
         return reportService.getAllTrucksExpenseSummary(startTime, endTime);
+    }
+
+    @GetMapping("/salary/detail")
+    public ResponseEntity<Object> exportSalaryDetailReport(@RequestParam String begin, @RequestParam String end) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(reportService.exportSalaryDetailReport(begin, end))
+        );
+    }
+
+    @GetMapping("/salary/summary")
+    public ResponseEntity<Object> exportSalarySummaryReport(@RequestParam String begin, @RequestParam String end) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(reportService.exportSalarySummaryReport(begin, end))
+        );
     }
 }

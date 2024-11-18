@@ -1,6 +1,5 @@
 package com.project.logistic_management.dto.request;
 
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +24,4 @@ public class ScheduleDTO {
     private Date departureTime;
 
     private Date arrivalTime;
-
-    private Integer status = 0;
-
-    private Integer expansesStatus = 0;
-
 }

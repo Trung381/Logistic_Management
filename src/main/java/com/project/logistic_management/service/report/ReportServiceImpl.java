@@ -6,11 +6,13 @@ import com.project.logistic_management.entity.*;
 import com.project.logistic_management.mapper.BaseMapper;
 import com.project.logistic_management.mapper.truckexpensesreportmapper.TruckExpensesReportMapper;
 import com.project.logistic_management.repository.BaseRepository;
+import com.project.logistic_management.repository.salary.SalaryRepo;
 import com.project.logistic_management.repository.expenses.ExpensesRepo;
 import com.project.logistic_management.repository.scheduleconfig.ScheduleConfigRepo;
 import com.project.logistic_management.repository.truck.TruckRepo;
 import com.project.logistic_management.repository.user.UserRepo;
 import com.project.logistic_management.service.BaseService;
+import lombok.RequiredArgsConstructor;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -28,11 +30,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import java.util.List;
 
 //public class ReportServiceImpl extends BaseService<BaseRepository, BaseMapper> implements ReportService
 @Service
 @RequiredArgsConstructor
 public class ReportServiceImpl extends BaseService<BaseRepository, BaseMapper> implements ReportService {
+    private final SalaryRepo salaryRepository;
+
+
+
+    @Override
+    public List<?> exportSalarySummaryReport(String begin, String end) {
+        return salaryRepository.exportSummaryReport(begin, end);
+    }
+
+    @Override
+    public List<?> exportSalaryDetailReport(String begin, String end) {
+        return salaryRepository.exportDetailReport(begin, end);
 
     private final TruckRepo truckRepo;
     private final UserRepo userRepo;
