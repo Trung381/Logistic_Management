@@ -27,24 +27,40 @@ public class SalaryRepoImpl extends BaseRepository implements SalaryRepoCustom {
         QSchedule qSchedule = QSchedule.schedule;
         QScheduleConfig qScheduleConfig = QScheduleConfig.scheduleConfig;
         QUser qUser = QUser.user;
+        QExpenses qExpenses = QExpenses.expenses;
 
         BooleanBuilder builder = new BooleanBuilder(qSalary.period.between(begin, end));
 
+        JPQLQuery<Integer> listUserID = JPAExpressions.select(qSalary.userId)
+                .from(qSalary)
+                .join(qUser).on(qSalary.userId.eq(qUser.id))
+                .where(builder.and(qUser.roleId.eq(qUser.roleId)));
+
         JPQLQuery<Double> totalCommission = JPAExpressions
-                .select(qScheduleConfig.commission.castToNum(Double.class).sum())
-                .from(qScheduleConfig, qSchedule)
-                .where(qScheduleConfig.id.eq(qSchedule.scheduleConfigId)
-                        .and(qSchedule.driverId.eq(qSalary.userId)));
+                .select(qScheduleConfig.commission.castToNum(Double.class).sum().coalesce(0d))
+                .from(qScheduleConfig)
+                .join(qSchedule).on(qScheduleConfig.id.eq(qSchedule.scheduleConfigId))
+                .where(qSchedule.driverId.in(listUserID)
+                );
 
         JPQLQuery<Double> totalExpenses = JPAExpressions
-                .select(qSchedule.totalExpenses.castToNum(Double.class).sum())
+                .select(
+                        qExpenses.amount.sum().castToNum(Double.class).coalesce(0d))
                 .from(qSchedule)
-                .where(qSchedule.driverId.eq(qSalary.userId));
+                .join(qExpenses).on(qSchedule.id.eq(qExpenses.scheduleId))
+                .where(qSchedule.driverId.in(listUserID)
+                );
+
+        NumberExpression<Double> totalReceived = qSalary.basicSalary.sum().castToNum(Double.class)
+                .add(qSalary.allowance.sum().castToNum(Double.class))
+                .add(totalCommission)
+                .add(totalExpenses)
+                .subtract(qSalary.advance.sum().castToNum(Double.class));
 
         return query.from(qSalary)
                 .leftJoin(qUser).on(qSalary.userId.eq(qUser.id))
                 .where(builder)
-                .groupBy(qUser.roleId, qSalary.userId)
+                .groupBy(qUser.roleId)
                 .select(Projections.fields(SalarySummaryReportDTO.class,
                         qUser.roleId,
                         qSalary.userId.count().castToNum(Integer.class).as("numberOfUser"),
@@ -52,7 +68,8 @@ public class SalaryRepoImpl extends BaseRepository implements SalaryRepoCustom {
                         qSalary.allowance.sum().castToNum(Double.class).as("totalAllowance"),
                         ExpressionUtils.as(totalCommission, "totalCommission"),
                         ExpressionUtils.as(totalExpenses, "totalExpenses"),
-                        qSalary.advance.sum().castToNum(Double.class).as("totalAdvance")
+                        qSalary.advance.sum().castToNum(Double.class).as("totalAdvance"),
+                        totalReceived.as("totalReceived")
                 ))
                 .fetch();
     }
