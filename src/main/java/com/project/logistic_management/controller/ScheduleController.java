@@ -15,6 +15,27 @@ import org.springframework.web.bind.annotation.*;
 public class ScheduleController {
     private final ScheduleService scheduleService;
 
+    @GetMapping
+    public ResponseEntity<Object> getSchedules() {
+        return ResponseEntity.ok(
+            BaseResponse.ok(scheduleService.getSchedules())
+        );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getScheduleById(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+            BaseResponse.ok(scheduleService.getScheduleById(id))
+        );
+    }
+
+    @GetMapping("/schedule_of_driver/{id}")
+    public ResponseEntity<Object> getScheduleByDriverId(@PathVariable Integer id) {
+        return ResponseEntity.ok(
+            BaseResponse.ok(scheduleService.getScheduleByDriverId(id))
+        );
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Object> createSchedule(@Valid @RequestBody ScheduleDTO dto) {
         return new ResponseEntity<>(
@@ -31,7 +52,7 @@ public class ScheduleController {
     }
 
     @PostMapping("/approve/{id}")
-    public ResponseEntity<Object> approveSchedule(@PathVariable Integer id, @RequestBody boolean isApproved) {
+    public ResponseEntity<Object> approveSchedule(@PathVariable Integer id, @RequestParam boolean isApproved) {
         return ResponseEntity.ok(
                 BaseResponse.ok(scheduleService.approveSchedule(id, isApproved))
         );
