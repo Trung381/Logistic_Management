@@ -2,6 +2,7 @@ package com.project.logistic_management.exception;
 
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.exception.def.ConflictException;
+import com.project.logistic_management.exception.def.ForbiddenException;
 import com.project.logistic_management.exception.def.EditNotAllowedException;
 import com.project.logistic_management.exception.def.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +48,17 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(BaseResponse.fail("Sai tên đăng nhập hoặc mật khẩu."), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<BaseResponse<String>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    //Bắt lỗi kiểu này sao biết bug nằm chỗ nào mà fix
+
+//    @ExceptionHandler(IllegalArgumentException.class)
+//    public ResponseEntity<BaseResponse<String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+//        return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.BAD_REQUEST);
+//    }
+
+
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<BaseResponse<String>> handleForbiddenException(ForbiddenException ex) {
+        return new ResponseEntity<>(BaseResponse.fail(ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

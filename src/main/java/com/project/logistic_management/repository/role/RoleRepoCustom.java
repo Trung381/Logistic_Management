@@ -11,6 +11,4 @@ public interface RoleRepoCustom {
     Role findRoleById(Integer id);
     List<Role> getAll();
     void deleteRoleById(Integer id);
-    boolean hasPermission(Integer roleId, String permissionName, PermissionKey key);
-
 }

@@ -16,8 +16,8 @@ public class TruckMapper extends BaseMapper {
                 .licensePlate(truckDTO.getLicensePlate())
                 .capacity(truckDTO.getCapacity())
                 .note(truckDTO.getNote())
-                .status(0)
-                .updatedAt(new Date())
+                .status(1)
+                .createdAt(new Date())
                 .build();
     }
 

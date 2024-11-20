@@ -1,12 +1,16 @@
 package com.project.logistic_management.mapper.schedule;
 
 import com.project.logistic_management.dto.request.ScheduleDTO;
+import com.project.logistic_management.entity.Expenses;
 import com.project.logistic_management.entity.Schedule;
+import com.project.logistic_management.entity.ScheduleConfig;
 import com.project.logistic_management.mapper.BaseMapper;
+import com.project.logistic_management.mapper.expenses.ExpensesMapper;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class ScheduleMapper extends BaseMapper {

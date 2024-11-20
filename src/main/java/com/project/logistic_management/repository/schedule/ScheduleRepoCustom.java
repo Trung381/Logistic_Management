@@ -1,5 +1,7 @@
 package com.project.logistic_management.repository.schedule;
 
+import com.project.logistic_management.dto.response.DriverTruckScheduleDto;
+import com.project.logistic_management.dto.response.DriversSchedulesDto;
 import com.project.logistic_management.entity.Schedule;
 
 import java.util.List;
@@ -13,4 +15,6 @@ public interface ScheduleRepoCustom {
     Optional<Schedule> getScheduleByDriverId(Integer id);
     Integer getExpensesStatus(Integer id);
     void setExpensesStatus(Integer id);
+    List<DriverTruckScheduleDto.FlatDto> fetchDriverTruckSchedules(Integer truckId, String startDate, String endDate);
+    List<DriversSchedulesDto.FlatDto> fetchAllTrucksSchedules(String startDate, String endDate);
 }
