@@ -32,6 +32,4 @@ public class GoodsController {
         List<GoodsDTO> goodsDTOList = goodsService.getAllGoods();
         return ResponseEntity.ok(goodsDTOList);
     }
-
-
 }
