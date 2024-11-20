@@ -5,6 +5,9 @@ import lombok.Data;
 
 @Data
 public class OutboundTransactionDetailDTO {
+    @NotNull(message = "ID phiếu xuất không được để trống")
+    private Integer outboundTransactionId;
+
     @NotNull(message = "ID hàng hóa không được để trống")
     private Integer goodsId;
 

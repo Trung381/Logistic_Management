@@ -1,8 +1,6 @@
 package com.project.logistic_management.repository.outboundtransactiondetail;
 
-import com.project.logistic_management.entity.OutboundTransaction;
 import com.project.logistic_management.entity.OutboundTransactionDetail;
-import com.project.logistic_management.entity.QOutboundTransaction;
 import com.project.logistic_management.entity.QOutboundTransactionDetail;
 import com.project.logistic_management.exception.def.NotFoundException;
 import com.project.logistic_management.repository.BaseRepository;

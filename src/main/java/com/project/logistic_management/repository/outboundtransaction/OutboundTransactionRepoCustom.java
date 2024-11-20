@@ -1,7 +1,6 @@
 package com.project.logistic_management.repository.outboundtransaction;
 
 import com.project.logistic_management.entity.OutboundTransaction;
-
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;

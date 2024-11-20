@@ -34,7 +34,7 @@ public class OutboundTransactionRepoImpl extends BaseRepository implements Outbo
         QOutboundTransaction qOutboundTransaction = QOutboundTransaction.outboundTransaction;
 
         BooleanBuilder builder = new BooleanBuilder();
-        builder.and(qOutboundTransaction.scheduleId.eq(userId));
+        builder.and(qOutboundTransaction.userId.eq(userId));
 
         return query.from(qOutboundTransaction)
                 .where(builder)

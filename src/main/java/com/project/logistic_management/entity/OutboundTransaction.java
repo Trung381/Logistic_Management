@@ -27,9 +27,6 @@ public class OutboundTransaction {
     @Column(name = "approved_time")
     private Date approvedTime;
 
-    @Column(name = "total_amount")
-    private Float totalAmount;
-
     @Column(name = "status")
     private Integer status;
 
