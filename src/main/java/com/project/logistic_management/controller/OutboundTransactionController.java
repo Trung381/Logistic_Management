@@ -1,18 +1,26 @@
 package com.project.logistic_management.controller;
 
-import com.project.logistic_management.dto.request.ExpensesDTO;
-import com.project.logistic_management.dto.request.TruckDTO;
 import com.project.logistic_management.dto.request.outbound.OutboundTransactionDTO;
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.entity.OutboundTransaction;
+import com.project.logistic_management.utils.ExcelUtils;
 import com.project.logistic_management.service.outboundtransaction.OutboundTransactionService;
+import com.project.logistic_management.utils.ExportConfig;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -89,6 +97,34 @@ public class OutboundTransactionController {
         outboundTransactionService.deleteOutboundTransaction(id);
     }
 
+    @GetMapping("/export")
+    public ResponseEntity<Resource> exportOutboundTransaction() throws Exception {
+        List<OutboundTransaction> outboundTransactionList = outboundTransactionService.getAllOutboundTransactions();
 
+        if (!CollectionUtils.isEmpty(outboundTransactionList)) {
+            String fileName = "OutboundTransaction Export" + ".xlsx";
 
+            ByteArrayInputStream in = ExcelUtils.export(outboundTransactionList, fileName, ExportConfig.outboundTransactionExport);
+
+            InputStreamResource inputStreamResource = new InputStreamResource(in);
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION,
+                            "attachment; filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8)
+                    )
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel; charset=UTF-8"))
+                    .body(inputStreamResource);
+        } else {
+            throw new Exception("No data");
+
+        }
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<Object> importOutboundTransactionData(@RequestParam("file") MultipartFile importFile) {
+        return new ResponseEntity<>(
+                BaseResponse.ok(outboundTransactionService.importOutboundTransactionData(importFile)),
+                HttpStatus.CREATED
+        );
+    }
 }

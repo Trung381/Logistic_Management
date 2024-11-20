@@ -1,8 +1,10 @@
 package com.project.logistic_management.service.outboundtransaction;
 
 import com.project.logistic_management.dto.request.outbound.OutboundTransactionDTO;
+import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.entity.OutboundTransaction;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -19,4 +21,5 @@ public interface OutboundTransactionService {
     List<OutboundTransaction> getOutboundTransactionByTime(Timestamp fromDate, Timestamp toDate);
     void deleteOutboundTransaction(Integer id);
     OutboundTransaction updateStatus(Integer id, Integer status);
+    List<OutboundTransaction> importOutboundTransactionData(MultipartFile importFile);
 }

@@ -5,7 +5,10 @@ import com.project.logistic_management.entity.OutboundTransaction;
 import com.project.logistic_management.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OutboundTransactionMapper extends BaseMapper {
@@ -20,6 +23,23 @@ public class OutboundTransactionMapper extends BaseMapper {
                 .updatedAt(new Date())
                 .build();
     }
+
+
+    public List<OutboundTransaction> toOutboundTransactions(List<OutboundTransactionDTO> outboundDTOList) {
+        if (outboundDTOList == null || outboundDTOList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return outboundDTOList.stream().map(outboundDTO ->
+                OutboundTransaction.builder()
+                        .userId(outboundDTO.getUserId())
+                        .scheduleId(outboundDTO.getScheduleId())
+                        .status(0)
+                        .createdAt(new Date())
+                        .build()
+        ).collect(Collectors.toList());
+    }
+
 
     public void  updateOutboundTransaction(OutboundTransaction outboundTransaction, OutboundTransactionDTO outboundDTO) {
         if(outboundDTO == null) return;
