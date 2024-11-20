@@ -198,11 +198,6 @@ CREATE TABLE `salary` (
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO salary (id, user_id, allowance, basic_salary, period, status, created_at, updated_at)
-VALUES (1, 1, 2000000, 10000000, "2024-11", 0, now(), now()),
-		(2, 2, 3000000, 8000000, "2024-11", 0, now(), now()),
-        (3, 1, 2000000, 10000000, "2023-10", 1, now(), now());
-
 CREATE TABLE `outbound_transaction_detail` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `goods_id` INT UNSIGNED NOT NULL,
