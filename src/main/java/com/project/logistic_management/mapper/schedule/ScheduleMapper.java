@@ -1,12 +1,16 @@
 package com.project.logistic_management.mapper.schedule;
 
 import com.project.logistic_management.dto.request.ScheduleDTO;
+import com.project.logistic_management.entity.Expenses;
 import com.project.logistic_management.entity.Schedule;
+import com.project.logistic_management.entity.ScheduleConfig;
 import com.project.logistic_management.mapper.BaseMapper;
+import com.project.logistic_management.mapper.expenses.ExpensesMapper;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class ScheduleMapper extends BaseMapper {
@@ -21,8 +25,8 @@ public class ScheduleMapper extends BaseMapper {
                 .pathAttachDocument(dto.getPathAttachDocument())
                 .departureTime(dto.getDepartureTime())
                 .arrivalTime(dto.getArrivalTime())
-                .status(dto.getStatus())
-                .expensesStatus(dto.getExpansesStatus())
+                .status(0)
+                .expensesStatus(0)
                 .createdAt(new Date())
                 .updatedAt(new Date())
                 .build();
@@ -40,4 +44,5 @@ public class ScheduleMapper extends BaseMapper {
         schedule.setArrivalTime(dto.getArrivalTime());
         schedule.setUpdatedAt(new Date());
     }
+
 }
