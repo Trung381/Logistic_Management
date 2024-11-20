@@ -67,19 +67,9 @@ public class ExpensesRepoImpl extends BaseRepository implements ExpensesRepoCust
     @Transactional
     public long approveExpenses(Integer id) {
         QSchedule qSchedule = QSchedule.schedule;
-        QExpenses qExpenses = QExpenses.expenses;
-
-        Integer scheduleId = query.from(qExpenses)
-                .where(qExpenses.id.eq(id))
-                .select(qExpenses.scheduleId)
-                .fetchOne();
-
-        if (scheduleId == null) {
-            return 0;
-        }
 
         return query.update(qSchedule)
-                .where(qSchedule.id.eq(scheduleId))
+                .where(qSchedule.id.eq(id))
                 .set(qSchedule.expensesStatus, 1)
                 .execute();
     }

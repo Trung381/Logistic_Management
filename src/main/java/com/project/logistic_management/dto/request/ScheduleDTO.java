@@ -25,9 +25,4 @@ public class ScheduleDTO {
     private Date departureTime;
 
     private Date arrivalTime;
-
-    private Integer status = 0;
-
-    private Integer expansesStatus = 0;
-
 }

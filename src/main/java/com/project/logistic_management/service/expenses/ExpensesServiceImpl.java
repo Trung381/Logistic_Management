@@ -2,6 +2,8 @@ package com.project.logistic_management.service.expenses;
 
 import com.project.logistic_management.dto.request.ExpensesDTO;
 import com.project.logistic_management.entity.Expenses;
+import com.project.logistic_management.entity.Schedule;
+import com.project.logistic_management.exception.def.EditNotAllowedException;
 import com.project.logistic_management.exception.def.NotFoundException;
 import com.project.logistic_management.mapper.expenses.ExpensesMapper;
 import com.project.logistic_management.repository.expenses.ExpensesRepo;
@@ -26,6 +28,13 @@ public class ExpensesServiceImpl extends BaseService<ExpensesRepo, ExpensesMappe
 
     @Override
     public Expenses createExpenses(ExpensesDTO dto) {
+        Integer expensesStatus = scheduleService.getExpensesStatus(dto.getScheduleId());
+
+        switch (expensesStatus) {
+            case 1 -> throw new EditNotAllowedException("Chi phí đã được duyệt, không thể chỉnh sửa!");
+            case -1 -> scheduleService.setExpensesStatus(dto.getScheduleId());
+        }
+
         Expenses expenses = mapper.toExpenses(dto);
         return repository.save(expenses);
     }
@@ -53,6 +62,12 @@ public class ExpensesServiceImpl extends BaseService<ExpensesRepo, ExpensesMappe
     public Expenses updateExpenses(Integer id, ExpensesDTO dto) {
         Expenses expenses = repository.getExpensesById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy thông tin chi phí cần tìm!"));
+
+        Integer expensesStatus = scheduleService.getExpensesStatus(expenses.getScheduleId());
+
+        if (expensesStatus == 1) {
+            throw new EditNotAllowedException("Chi phí đã được duyệt, không thể chỉnh sửa!");
+        }
         mapper.updateExpenses(expenses, dto);
         try {
             return repository.save(expenses);
