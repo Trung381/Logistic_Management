@@ -1,14 +1,16 @@
 package com.project.logistic_management.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "outbound_transaction")
 public class OutboundTransaction {
     @Id
@@ -24,9 +26,6 @@ public class OutboundTransaction {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "approved_time")
     private Date approvedTime;
-
-    @Column(name = "total_amount")
-    private Float totalAmount;
 
     @Column(name = "status")
     private Integer status;

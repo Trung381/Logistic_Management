@@ -10,4 +10,9 @@ public interface ScheduleService {
     Schedule updateSchedule(Integer id, ScheduleDTO dto);
     String approveSchedule(Integer id, boolean isApproved);
     List<Integer> getSchedulesIdByDriverId(Integer id);
+    Schedule getScheduleById(Integer id);
+    List<Schedule> getSchedules();
+    Schedule getScheduleByDriverId(Integer id);
+    Integer getExpensesStatus(Integer id);
+    void setExpensesStatus(Integer id);
 }
