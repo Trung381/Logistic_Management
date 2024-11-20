@@ -19,12 +19,19 @@ public class GoodsController {
     @Autowired
     private GoodsService goodsService;
 
-    @GetMapping("/{goodsId}")
-    Goods getGoods(@PathVariable ("goodsId") Integer goodsId) {
-        return goodsService.getGoodsByID(goodsId);
-    }
+
+   @GetMapping("/{goodsId}")
+   public ResponseEntity<GoodsDTO> getGoods (@PathVariable Integer goodsId){
+       GoodsDTO goodsDTO = goodsService.getGoodsByID(goodsId);
+       return ResponseEntity.ok(goodsDTO);
+   }
+
     @GetMapping
-    List<GoodsDTO> goodsList() {
-        return goodsService.getAllGoods();
+    public ResponseEntity<List<GoodsDTO>> getAllGoods() {
+        // Gọi service để lấy danh sách hàng hóa
+        List<GoodsDTO> goodsDTOList = goodsService.getAllGoods();
+        return ResponseEntity.ok(goodsDTOList);
     }
+
+
 }

@@ -29,9 +29,6 @@ public class InboundTransactionController {
     @GetMapping("/{userId}")
     public ResponseEntity<List<InboundTransactionResponse>> getInboundTransactionsByUserId(@PathVariable Integer userId) {
         List<InboundTransaction> transactions = inboundTransactionService.getInboundTransactionsByUserId(userId);
-        if (transactions.isEmpty()) {
-            return ResponseEntity.status(404).body(Collections.emptyList());
-        }
         List<InboundTransactionResponse> responseList = transactions.stream()
                 .map(InboundTransactionResponse::new)
                 .collect(Collectors.toList());
@@ -46,21 +43,15 @@ public class InboundTransactionController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date start = dateFormat.parse(startDate);
             Date end = dateFormat.parse(endDate);
-
             List<InboundTransaction> transactions = inboundTransactionService.getInboundTransactionsByDateRange(start, end);
-
-            if (transactions.isEmpty()) {
-                return ResponseEntity.status(404).body(Collections.emptyList());
-            }
-
             List<InboundTransactionResponse> responseList = transactions.stream()
                     .map(InboundTransactionResponse::new)
                     .collect(Collectors.toList());
-
             return ResponseEntity.ok(responseList);
 
         } catch (ParseException e) {
-            return ResponseEntity.status(400).body(Collections.emptyList());
+//            return ResponseEntity.status(400).body(Collections.emptyList());
+            throw new IllegalArgumentException("Định dạng date không hợp lệ!!");
         }
     }
 }

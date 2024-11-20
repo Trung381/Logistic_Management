@@ -5,6 +5,8 @@ import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
 import com.project.logistic_management.entity.Goods;
 import com.project.logistic_management.entity.InboundTransaction;
 import com.project.logistic_management.entity.InboundTransactionDetail;
+import com.project.logistic_management.exception.def.ConflictException;
+import com.project.logistic_management.exception.def.NotFoundException;
 import com.project.logistic_management.mapper.inboundTransactionDetail.InboundTransactionDetailMapper;
 import com.project.logistic_management.repository.goods.GoodsRepo;
 import com.project.logistic_management.repository.inboundTransactionDetail.InboundTransactionDetailRepo;
@@ -28,8 +30,16 @@ public class inboundTransactionDetailServiceImpl {
     //thêm chi tiết giao dịch nhập
     public InboundTransactionDetail addInboundTransactionDetail(InboundTransactionDetailDTO dto) {
         //chỉ kiểm tra sự tồn tại của ID mà không cần lấy đối tượng. nên dùng existsById chứ k dùng optional
-        if (dto.getId() != null && inboundTransactionDetailRepo.existsById(dto.getId())) {
-            throw new RuntimeException("ID của chi tiết giao dịch nhập đã tồn tại: " + dto.getId());
+//        if (dto.getId() != null && inboundTransactionDetailRepo.existsById(dto.getId())) {
+//            throw new ConflictException("ID của giao dịch đã tồn tại. Vui lòng tạo giao dịch khác.");
+//        }
+
+        if (dto.getId() != null) {
+            boolean exists = inboundTransactionDetailRepo.existsById(dto.getId());
+            System.out.println("Check existsById: " + exists+ "ID là" + dto.getId());
+            if (exists) {
+                throw new ConflictException("ID của giao dịch đã tồn tại. Vui lòng tạo giao dịch khác.");
+            }
         }
 
         // tìm kiếm hàng theo Id hàng để tính được tổng tiền của detail
@@ -41,7 +51,8 @@ public class inboundTransactionDetailServiceImpl {
         // tìm kiếm InboundTransactionId để cập nhật lại totalAmount += DetailAmount
         Optional<InboundTransaction> optional = inboundTransactionRepo.findById(dto.getInboundTransactionId());
         if (!optional.isPresent()) {
-            throw new RuntimeException("Không tìm thấy giao dịch nhập với ID: " + dto.getInboundTransactionId());
+            throw new NotFoundException("Không tìm thấy giao dịch nhập với ID: " + dto.getInboundTransactionId()+
+                    " Vui lòng nhập chi tiết giao dichj vào giao dịch nhập đã tồn tại!");
         }
 
         // nên sửa laij dùng DTO chỗ này
@@ -60,9 +71,8 @@ public class inboundTransactionDetailServiceImpl {
     public InboundTransactionDetail updateInboundTransactionDetail(Integer id, InboundTransactionDetailDTO dto) {
         Optional<InboundTransactionDetail> optional = inboundTransactionDetailRepo.findById(id);
         if (!optional.isPresent()) {
-            throw new RuntimeException("Không tìm thấy chi tiết giao dịch nhập với ID: " + id);
+            throw new NotFoundException("Không tìm thấy chi tiết giao dịch nhập với ID: " + id);
         }
-
         Float totalAmount = 0.0f;
         Optional<Goods> goodsDTO = goodsRepo.findById(dto.getGoodsId());
         Float goodsPrice = goodsDTO.get().getPrice();
@@ -71,6 +81,7 @@ public class inboundTransactionDetailServiceImpl {
         // lấy đối tượng lúc này vẫn chưa được update
         InboundTransactionDetail inboundTransactionDetail = optional.get();
         int oldQuantity = inboundTransactionDetail.getQuantity();
+
         Float detailAmount = unitPrice * oldQuantity;
 
     // đối tượng đã được update
@@ -78,10 +89,6 @@ public class inboundTransactionDetailServiceImpl {
 
     // tìm inboundTransaction để sửa totalAmount
         Optional<InboundTransaction> inboundOptional = inboundTransactionRepo.findById(dto.getInboundTransactionId());
-        if (!optional.isPresent()) {
-            throw new RuntimeException("Không tìm thấy giao dịch nhập với ID: " + dto.getInboundTransactionId());
-        }
-
         // so lượng hàng mới sau khi sửa trong detail
         int newQuantity = inboundTransactionDetail.getQuantity();
         // cập nhật giá mới
@@ -96,6 +103,30 @@ public class inboundTransactionDetailServiceImpl {
 
         // Lưu đối tượng đã cập nhật vào cơ sở dữ liệu
         return inboundTransactionDetailRepo.save(inboundTransactionDetail);
+    }
+
+    public InboundTransactionDetail deleteInboundTransactionDetail(Integer Id,InboundTransactionDetailDTO dto){
+        Optional <InboundTransactionDetail> optional = inboundTransactionDetailRepo.findById(Id);
+        if(!optional.isPresent()) {
+            throw new NotFoundException("Không tìm thâ chi tiết giao dịch!");
+        }
+        Float detailAmount = 0.0f;
+        Optional<Goods> goodsDTO = goodsRepo.findById(dto.getGoodsId());
+        int quantity = goodsDTO.get().getQuantity();
+        Float goodsPrice = goodsDTO.get().getPrice();
+        Float goodsUnit = goodsPrice / quantity;
+        // lấy số lượng của chi tiết hóa đơn để tinhs tiền
+        InboundTransactionDetail inboundTransactionDetail = optional.get();
+        int oldQuantity = inboundTransactionDetail.getQuantity();
+        detailAmount = goodsUnit * oldQuantity;
+        //tìm giao dịch contain chi tiết giao dịch để cập nhật lại totalAmount sau khi xóa
+        Optional<InboundTransaction> inboundOptional = inboundTransactionRepo.findById(dto.getInboundTransactionId());
+        InboundTransaction inboundTransaction = inboundOptional.get();
+        inboundTransaction.setTotalAmount(inboundTransaction.getTotalAmount() - detailAmount);
+
+        inboundTransactionRepo.save(inboundTransaction);
+        inboundTransactionDetailRepo.deleteById(dto.getId());
+        return inboundTransactionDetail;
     }
 
 }
