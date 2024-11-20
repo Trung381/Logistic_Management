@@ -65,4 +65,16 @@ public class ScheduleServiceImpl extends BaseService<ScheduleRepo, ScheduleMappe
         return repository.getScheduleByDriverId(id)
             .orElseThrow(() -> new NotFoundException("Không tìm thấy thông tin lịch trình!"));
     }
+
+    @Override
+    public Integer getExpensesStatus(Integer id) {
+        return repository.getExpensesStatus(id);
+    }
+
+    @Override
+    public void setExpensesStatus(Integer id) {
+        repository.setExpensesStatus(id);
+    }
+
+
 }

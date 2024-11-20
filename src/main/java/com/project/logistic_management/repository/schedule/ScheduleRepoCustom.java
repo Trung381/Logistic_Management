@@ -13,6 +13,8 @@ public interface ScheduleRepoCustom {
     List<Integer> getSchedulesIdByDriverId(Integer id);
     List<Schedule> getSchedules();
     Optional<Schedule> getScheduleByDriverId(Integer id);
+    Integer getExpensesStatus(Integer id);
+    void setExpensesStatus(Integer id);
     List<DriverTruckScheduleDto.FlatDto> fetchDriverTruckSchedules(Integer truckId, String startDate, String endDate);
     List<DriversSchedulesDto.FlatDto> fetchAllTrucksSchedules(String startDate, String endDate);
 }

@@ -13,4 +13,6 @@ public interface ScheduleService {
     Schedule getScheduleById(Integer id);
     List<Schedule> getSchedules();
     Schedule getScheduleByDriverId(Integer id);
+    Integer getExpensesStatus(Integer id);
+    void setExpensesStatus(Integer id);
 }

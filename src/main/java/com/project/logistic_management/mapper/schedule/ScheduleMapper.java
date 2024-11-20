@@ -24,9 +24,8 @@ public class ScheduleMapper extends BaseMapper {
                 .driverId(dto.getDriverId())
                 .pathAttachDocument(dto.getPathAttachDocument())
                 .departureTime(dto.getDepartureTime())
-                .arrivalTime(dto.getArrivalTime())
                 .status(0)
-                .expensesStatus(0)
+                .expensesStatus(-1)
                 .createdAt(new Date())
                 .updatedAt(new Date())
                 .build();
@@ -44,5 +43,4 @@ public class ScheduleMapper extends BaseMapper {
         schedule.setArrivalTime(dto.getArrivalTime());
         schedule.setUpdatedAt(new Date());
     }
-
 }

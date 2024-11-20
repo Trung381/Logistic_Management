@@ -92,6 +92,30 @@ public class ScheduleRepoImpl extends BaseRepository implements ScheduleRepoCust
     }
 
     @Override
+    public Integer getExpensesStatus(Integer id) {
+        QSchedule qSchedule = QSchedule.schedule;
+
+        BooleanBuilder builder = new BooleanBuilder()
+                .and(qSchedule.id.eq(id));
+
+        return query.from(qSchedule)
+                .where(builder)
+                .select(qSchedule.expensesStatus)
+                .fetchOne();
+    }
+
+    @Override
+    @Modifying
+    @Transactional
+    public void setExpensesStatus(Integer id) {
+        QSchedule qSchedule = QSchedule.schedule;
+        query.update(qSchedule)
+                .where(qSchedule.id.eq(id))
+                .set(qSchedule.expensesStatus, 0)
+                .execute();
+    }
+
+    @Override
     public List<DriverTruckScheduleDto.FlatDto> fetchDriverTruckSchedules(Integer truckId, String startDate, String endDate) {
         return query
                 .select(Projections.fields(FlatDto.class,

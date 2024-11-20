@@ -3,6 +3,7 @@ package com.project.logistic_management.exception;
 import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.exception.def.ConflictException;
 import com.project.logistic_management.exception.def.ForbiddenException;
+import com.project.logistic_management.exception.def.EditNotAllowedException;
 import com.project.logistic_management.exception.def.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -65,6 +66,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(
                 BaseResponse.fail(e.getMessage()),
                 HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(EditNotAllowedException.class)
+    public ResponseEntity<Object> handleEditNotAllowedException(EditNotAllowedException e) {
+        return new ResponseEntity<>(
+                BaseResponse.fail(e.getMessage()),
+                HttpStatus.CONFLICT
         );
     }
 }

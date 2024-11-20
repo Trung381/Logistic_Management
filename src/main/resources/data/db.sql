@@ -121,7 +121,8 @@ CREATE TABLE `outbound_transaction` (
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+  FOREIGN KEY (`user_id`) REFERENCES `user`(`id`),
+  FOREIGN KEY (`schedule_id`) REFERENCES `schedule`(`id`)
 ) ENGINE = InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
@@ -171,7 +172,7 @@ CREATE TABLE `schedule` (
   `departure_time` TIMESTAMP NOT NULL COMMENT "Thời gian khởi hành",
   `arrival_time` TIMESTAMP COMMENT "Thời gian hoàn thành",
   `status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái lịch trình: -1 - Không duyệt, 0 - Đang chờ, 1 - Đã duyệt và chưa hoàn thành, 2 - Đã hoàn thành",
-  `expenses_status` INT NOT NULL DEFAULT 0 COMMENT "Trạng thái thanh toán chi phí: 0 - Chưa thanh toán, 1 - Đã thanh toán",
+  `expenses_status` INT NOT NULL DEFAULT -1 COMMENT "Trạng thái thanh toán chi phí: -1 - Chưa có chi phí phát sinh, 0 - Chưa thanh toán, 1 - Đã thanh toán",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
   PRIMARY KEY (`id`),
