@@ -57,4 +57,11 @@ public class ScheduleController {
                 BaseResponse.ok(scheduleService.approveSchedule(id, isApproved))
         );
     }
+
+    @GetMapping("/confirm/{id}")
+    public ResponseEntity<Object> confirmCompletion(@PathVariable Integer id, @RequestParam String fileName) {
+        return ResponseEntity.ok(
+                BaseResponse.ok(scheduleService.confirmCompletion(id, fileName))
+        );
+    }
 }

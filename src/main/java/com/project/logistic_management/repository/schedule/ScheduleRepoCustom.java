@@ -17,4 +17,5 @@ public interface ScheduleRepoCustom {
     void setExpensesStatus(Integer id);
     List<DriverTruckScheduleDto.FlatDto> fetchDriverTruckSchedules(Integer truckId, String startDate, String endDate);
     List<DriversSchedulesDto.FlatDto> fetchAllTrucksSchedules(String startDate, String endDate);
+    long confirmCompletion(Integer id, String pathAttach);
 }

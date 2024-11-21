@@ -15,4 +15,5 @@ public interface ScheduleService {
     Schedule getScheduleByDriverId(Integer id);
     Integer getExpensesStatus(Integer id);
     void setExpensesStatus(Integer id);
+    long confirmCompletion(Integer id, String fileName);
 }

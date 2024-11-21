@@ -6,6 +6,9 @@ import com.project.logistic_management.exception.def.NotFoundException;
 import com.project.logistic_management.mapper.schedule.ScheduleMapper;
 import com.project.logistic_management.repository.schedule.ScheduleRepo;
 import com.project.logistic_management.service.BaseService;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,9 @@ public class ScheduleServiceImpl extends BaseService<ScheduleRepo, ScheduleMappe
 
     @Override
     public Schedule createSchedule(ScheduleDTO dto) {
+        //".../api/schedules/3
+        //notification.save(tb)
+        //tb:
         Schedule schedule = mapper.toSchedule(dto);
         return repository.save(schedule);
     }
@@ -76,5 +82,9 @@ public class ScheduleServiceImpl extends BaseService<ScheduleRepo, ScheduleMappe
         repository.setExpensesStatus(id);
     }
 
-
+    @Override
+    public long confirmCompletion(Integer id, String fileName) {
+        String path = "src/main/resources/static/docs/" + fileName;
+        return repository.confirmCompletion(id, path);
+    }
 }
