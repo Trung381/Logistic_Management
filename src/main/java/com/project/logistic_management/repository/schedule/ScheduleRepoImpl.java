@@ -4,6 +4,7 @@ import com.project.logistic_management.dto.response.DriverTruckScheduleDto;
 import com.project.logistic_management.dto.response.DriverTruckScheduleDto.FlatDto;
 import com.project.logistic_management.dto.response.DriversSchedulesDto;
 import com.project.logistic_management.entity.*;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.project.logistic_management.repository.BaseRepository;
 import com.querydsl.core.BooleanBuilder;
@@ -30,7 +31,7 @@ public class ScheduleRepoImpl extends BaseRepository implements ScheduleRepoCust
 
     @Override
     public Optional<Schedule> getScheduleById(Integer id) {
-        QSchedule qSchedule = QSchedule.schedule;
+        QSchedule qSchedule = schedule;
 
         BooleanBuilder builder = new BooleanBuilder()
                 .and(qSchedule.id.eq(id));
@@ -47,6 +48,12 @@ public class ScheduleRepoImpl extends BaseRepository implements ScheduleRepoCust
     @Transactional
     public long approveSchedule(Integer id, boolean isApproved) {
         QSchedule qSchedule = QSchedule.schedule;
+
+        if (isApproved) {
+            setStatusForDriverAndTruck(id, -1, 0);
+        } else {
+            setStatusForDriverAndTruck(id, 1, 1);
+        }
 
         return query.update(qSchedule)
                 .where(qSchedule.id.eq(id))
@@ -188,5 +195,42 @@ public class ScheduleRepoImpl extends BaseRepository implements ScheduleRepoCust
                         qSchedule.status, qSchedule.expensesStatus, qSchedule.pathAttachDocument)
                 .orderBy(qTruck.licensePlate.asc(), qSchedule.departureTime.asc())
                 .fetch();
+    }
+
+    @Override
+    @Modifying
+    @Transactional
+    public long confirmCompletion(Integer id, String pathAttach) {
+        QSchedule qSchedule = QSchedule.schedule;
+
+        setStatusForDriverAndTruck(id, 1, 1);
+
+        return query.update(qSchedule)
+                .where(qSchedule.id.eq(id))
+                .set(qSchedule.status, 2)
+                .set(qSchedule.pathAttachDocument, pathAttach)
+                .execute();
+    }
+
+    void setStatusForDriverAndTruck(int id, int driverStatus, int truckStatus) {
+        QSchedule qSchedule = QSchedule.schedule;
+        QTruck qTruck = QTruck.truck;
+        QUser qUser = QUser.user;
+
+        Tuple tuple = query.from(qSchedule)
+                .where(qSchedule.id.eq(id))
+                .select(qSchedule.truckId, qSchedule.driverId)
+                .fetchOne();
+
+        if (tuple != null) {
+            query.update(qTruck)
+                    .where(qTruck.id.eq(tuple.get(qSchedule.truckId)))
+                    .set(qTruck.status, truckStatus)
+                    .execute();
+            query.update(qUser)
+                    .where(qUser.id.eq(tuple.get(qSchedule.driverId)))
+                    .set(qUser.status, driverStatus)
+                    .execute();
+        }
     }
 }
