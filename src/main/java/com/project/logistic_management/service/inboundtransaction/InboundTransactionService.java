@@ -11,6 +11,7 @@ public interface InboundTransactionService {
 
     // Lấy danh sách giao dịch nhập theo userId
     List<InboundTransaction> getInboundTransactionsByUserId(Integer userId);
+    List<InboundTransaction> getAllInboundTransactions();
 
     // Lấy danh sách giao dịch nhập theo khoảng ngày
     List<InboundTransaction> getInboundTransactionsByDateRange(Date startDate, Date endDate);

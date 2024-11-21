@@ -20,13 +20,13 @@ public class GoodsController {
     private GoodsService goodsService;
 
 
-   @GetMapping("/{goodsId}")
+   @GetMapping("/findById/{goodsId}")
    public ResponseEntity<GoodsDTO> getGoods (@PathVariable Integer goodsId){
        GoodsDTO goodsDTO = goodsService.getGoodsByID(goodsId);
        return ResponseEntity.ok(goodsDTO);
    }
 
-    @GetMapping
+    @GetMapping("/findAll")
     public ResponseEntity<List<GoodsDTO>> getAllGoods() {
         // Gọi service để lấy danh sách hàng hóa
         List<GoodsDTO> goodsDTOList = goodsService.getAllGoods();

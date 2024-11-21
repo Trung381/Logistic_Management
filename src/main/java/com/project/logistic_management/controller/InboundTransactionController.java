@@ -1,7 +1,7 @@
 package com.project.logistic_management.controller;
 
 import com.project.logistic_management.dto.request.InboundTransactionDTO;
-import com.project.logistic_management.dto.response.InboundTransactionResponse;
+import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.entity.InboundTransaction;
 import com.project.logistic_management.service.inboundtransaction.InboundTransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,33 +10,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/inbound-transactions")
+@RequestMapping("/inbound_transactions")
 public class InboundTransactionController {
     @Autowired
     private InboundTransactionService inboundTransactionService;
-    @PostMapping
-    public ResponseEntity<InboundTransactionResponse> addInboundTransaction(@RequestBody InboundTransactionDTO dto) {
+    @PostMapping("/create")
+    public ResponseEntity<BaseResponse<InboundTransaction>> addInboundTransaction(@RequestBody InboundTransactionDTO dto) {
         InboundTransaction createdTransaction = inboundTransactionService.addInboundTransaction(dto);
-        return ResponseEntity.ok(InboundTransactionResponse.createSuccessResponse(createdTransaction));
+        return ResponseEntity.status(201).body(BaseResponse.ok(createdTransaction));
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<InboundTransactionResponse>> getInboundTransactionsByUserId(@PathVariable Integer userId) {
-        List<InboundTransaction> transactions = inboundTransactionService.getInboundTransactionsByUserId(userId);
-        List<InboundTransactionResponse> responseList = transactions.stream()
-                .map(InboundTransactionResponse::new)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(responseList);
+    @GetMapping("/findById/{userId}")
+    public ResponseEntity<BaseResponse<List<InboundTransaction>>> getInboundTransactionsByUserId(@PathVariable Integer userId) {
+        List<InboundTransaction> inboundTransactions = inboundTransactionService.getInboundTransactionsByUserId(userId);
+        return ResponseEntity.ok(BaseResponse.ok(inboundTransactions));
     }
 
-    @GetMapping("/{startDate}/{endDate}")
-    public ResponseEntity<List<InboundTransactionResponse>> getInboundTransactionsByDateRange(
+    @GetMapping("/findAll")
+    public ResponseEntity<BaseResponse<List<InboundTransaction>>> getAllInboundTransaction() {
+        List<InboundTransaction> inboundTransactions = inboundTransactionService.getAllInboundTransactions();
+        return ResponseEntity.ok(BaseResponse.ok(inboundTransactions));
+    }
+
+
+    @GetMapping("/findByDateRange/{startDate}/{endDate}")
+    public ResponseEntity<BaseResponse<List<InboundTransaction>>>  getInboundTransactionsByDateRange(
             @PathVariable String startDate,
             @PathVariable String endDate) {
         try {
@@ -44,10 +46,7 @@ public class InboundTransactionController {
             Date start = dateFormat.parse(startDate);
             Date end = dateFormat.parse(endDate);
             List<InboundTransaction> transactions = inboundTransactionService.getInboundTransactionsByDateRange(start, end);
-            List<InboundTransactionResponse> responseList = transactions.stream()
-                    .map(InboundTransactionResponse::new)
-                    .collect(Collectors.toList());
-            return ResponseEntity.ok(responseList);
+            return ResponseEntity.ok(BaseResponse.ok(transactions));
 
         } catch (ParseException e) {
 //            return ResponseEntity.status(400).body(Collections.emptyList());

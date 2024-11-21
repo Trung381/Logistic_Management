@@ -1,46 +1,61 @@
 package com.project.logistic_management.controller;
 
 import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
-import com.project.logistic_management.dto.response.InboundTransactionDetailResponse;
+import com.project.logistic_management.dto.response.BaseResponse;
 import com.project.logistic_management.entity.InboundTransactionDetail;
-import com.project.logistic_management.exception.def.ConflictException;
 import com.project.logistic_management.service.inboundTransactionDetail.inboundTransactionDetailServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
-@RequestMapping("/inbound-transaction-details")
+@RequestMapping("/inbound_transaction_details")
 public class InboundTransactionDetailController {
     @Autowired
     private inboundTransactionDetailServiceImpl inboundTransactionDetailService;
 
-    @PostMapping
-    public ResponseEntity<InboundTransactionDetailResponse> addInboundTransactionDetail(@RequestBody InboundTransactionDetailDTO dto) {
+    @PostMapping("/create")
+    public ResponseEntity<BaseResponse<InboundTransactionDetail>> addInboundTransactionDetail(
+            @RequestBody InboundTransactionDetailDTO dto) {
         InboundTransactionDetail createdDetail = inboundTransactionDetailService.addInboundTransactionDetail(dto);
-        InboundTransactionDetailResponse response = new InboundTransactionDetailResponse(createdDetail);
-        return ResponseEntity.status(201).body(response);
+        return ResponseEntity.status(201).body(BaseResponse.ok(createdDetail));
     }
 
-
-    @PutMapping("/{id}")
-    public InboundTransactionDetailResponse updateInboundTransactionDetail(
+    @PutMapping("/update/{id}")
+    public ResponseEntity<BaseResponse<InboundTransactionDetail>> updateInboundTransactionDetail(
             @PathVariable Integer id,
             @RequestBody InboundTransactionDetailDTO dto) {
         InboundTransactionDetail updatedDetail = inboundTransactionDetailService.updateInboundTransactionDetail(id, dto);
-        return new InboundTransactionDetailResponse(updatedDetail); // Trả về đối tượng response
+        return ResponseEntity.ok(BaseResponse.ok(updatedDetail));
     }
 
-    @DeleteMapping("/{id}")
-    public InboundTransactionDetailResponse deleteInboundTransactionDetail(
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<BaseResponse<InboundTransactionDetail>> deleteInboundTransactionDetail(
             @PathVariable Integer id,
             @RequestBody InboundTransactionDetailDTO dto) {
         InboundTransactionDetail deletedDetail = inboundTransactionDetailService.deleteInboundTransactionDetail(id, dto);
-        // Tạo đối tượng response từ chi tiết đã xóa
-        InboundTransactionDetailResponse response = new InboundTransactionDetailResponse(deletedDetail);
-        return ResponseEntity.ok(response).getBody();
+        return ResponseEntity.ok(BaseResponse.ok(deletedDetail));
+    }
+    @GetMapping("/findAll")
+    public ResponseEntity<BaseResponse<List<InboundTransactionDetail>>> getAllInboundTransactionDetail() {
+        List<InboundTransactionDetail>  transactionDetails = inboundTransactionDetailService
+                .getAllInboundTransactionDetail();
+        return ResponseEntity.ok(BaseResponse.ok(transactionDetails));
+    }
+    @GetMapping("/findById/{id}")
+    public ResponseEntity<BaseResponse<InboundTransactionDetail>> getInboundTransactionDetailById(
+            @PathVariable Integer id) {
+        InboundTransactionDetail transactionDetail = inboundTransactionDetailService.getInboundTransactionDetailById(id);
+        return ResponseEntity.ok(BaseResponse.ok(transactionDetail));
+    }
+
+    @GetMapping("/findByTransactionId/{id}")
+    public ResponseEntity<BaseResponse<List<InboundTransactionDetail>>> getInboundTransactionDetailByTransactionId(
+            @PathVariable Integer id) {
+        List<InboundTransactionDetail>  transactionDetails = inboundTransactionDetailService
+                .getInboundTransactionDetailByTransactionId(id);
+        return ResponseEntity.ok(BaseResponse.ok(transactionDetails));
     }
 }
-

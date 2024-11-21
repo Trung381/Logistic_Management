@@ -52,4 +52,13 @@ public class InboundTransactionServiceImpl implements InboundTransactionService 
         }
         return transactions;
     }
+
+    @Override
+    public List<InboundTransaction> getAllInboundTransactions() {
+        List<InboundTransaction> transactions = inboundTransactionRepo.findAll();
+        if(transactions.isEmpty()) {
+            throw new NotFoundException("Không tồn tại giao dịch nào trong hệ thống");
+        }
+        return transactions;
+    }
 }
