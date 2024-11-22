@@ -1,11 +1,13 @@
 package com.project.logistic_management.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "inbound_transaction_detail")
 public class InboundTransactionDetail {

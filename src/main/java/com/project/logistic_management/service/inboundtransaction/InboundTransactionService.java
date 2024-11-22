@@ -7,12 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 public interface InboundTransactionService {
-    InboundTransaction addInboundTransaction(InboundTransactionDTO dto);
+    InboundTransactionDTO addInboundTransaction(InboundTransactionDTO dto);
 
     // Lấy danh sách giao dịch nhập theo userId
-    List<InboundTransaction> getInboundTransactionsByUserId(Integer userId);
-    List<InboundTransaction> getAllInboundTransactions();
+    List<InboundTransactionDTO> getInboundTransactionsByUserId(Integer userId);
+    List<InboundTransactionDTO> getAllInboundTransactions();
 
     // Lấy danh sách giao dịch nhập theo khoảng ngày
-    List<InboundTransaction> getInboundTransactionsByDateRange(Date startDate, Date endDate);
+    List<InboundTransactionDTO> getInboundTransactionsByDateRange(Date startDate, Date endDate);
+    InboundTransactionDTO getInboundTransactionById(Integer id);
 }
