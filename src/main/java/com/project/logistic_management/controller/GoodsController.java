@@ -2,14 +2,12 @@ package com.project.logistic_management.controller;
 
 import com.project.logistic_management.dto.request.GoodsDTO;
 import com.project.logistic_management.entity.Goods;
+import com.project.logistic_management.entity.QGoods;
 import com.project.logistic_management.service.goods.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +29,25 @@ public class GoodsController {
         // Gọi service để lấy danh sách hàng hóa
         List<GoodsDTO> goodsDTOList = goodsService.getAllGoods();
         return ResponseEntity.ok(goodsDTOList);
+    }
+
+    /**
+     * API để lọc hàng hóa theo giá và số lượng
+     *
+     * @param minPrice     Giá tối thiểu (tùy chọn)
+     * @param maxPrice     Giá tối đa (tùy chọn)
+     * @param minQuantity  Số lượng tối thiểu (tùy chọn)
+     * @param maxQuantity  Số lượng tối đa (tùy chọn)
+     * @return Danh sách GoodsDTO phù hợp với tiêu chí lọc
+     */
+    @GetMapping("/filter")
+    public ResponseEntity<List<GoodsDTO>> filterGoods(
+            @RequestParam(required = false) Float minPrice,
+            @RequestParam(required = false) Float maxPrice,
+            @RequestParam(required = false) Integer minQuantity,
+            @RequestParam(required = false) Integer maxQuantity
+    ) {
+        List<GoodsDTO> filteredGoods = goodsService.filterGoods(minPrice, maxPrice, minQuantity, maxQuantity);
+        return ResponseEntity.ok(filteredGoods); // Trả về kết quả
     }
 }

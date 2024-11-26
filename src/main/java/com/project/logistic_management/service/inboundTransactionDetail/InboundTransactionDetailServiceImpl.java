@@ -15,8 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
 @Service
-public class   InboundTransactionDetailServiceImpl implements  InboundTransactionDetailService {
+public class InboundTransactionDetailServiceImpl implements InboundTransactionDetailService {
     @Autowired
     private InboundTransactionDetailMapper inboundTransactionDetailMapper;
     @Autowired
@@ -128,10 +129,10 @@ public class   InboundTransactionDetailServiceImpl implements  InboundTransactio
 
     @Override
     public List<InboundTransactionDetailDTO> getInboundTransactionDetailByTransactionId(Integer Id) {
-       List<InboundTransactionDetail> transactionDetails = inboundTransactionDetailRepo.findByInboundTransactionId(Id);
-       if(transactionDetails.isEmpty()) {
-           throw new NotFoundException("Không tìm thấy giao dịch chi tiết nào trong giao dịch có ID: " + Id);
-       }
+        List<InboundTransactionDetail> transactionDetails = inboundTransactionDetailRepo.findByInboundTransactionId(Id);
+        if (transactionDetails.isEmpty()) {
+            throw new NotFoundException("Không tìm thấy giao dịch chi tiết nào trong giao dịch có ID: " + Id);
+        }
         return transactionDetails.stream()
                 .map(inboundTransactionDetailMapper::toDTO)
                 .toList();
