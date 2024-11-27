@@ -1,8 +1,7 @@
 package com.project.logistic_management.service.goods;
 
 import com.project.logistic_management.dto.request.GoodsDTO;
-import com.project.logistic_management.entity.Goods;
-//import com.project.logistic_management.entity.QGoods;
+import com.project.logistic_management.entity.Goods;git add
 import com.project.logistic_management.entity.QGoods;
 import com.project.logistic_management.exception.def.NotFoundException;
 import com.project.logistic_management.mapper.goods.GoodsMapper;
