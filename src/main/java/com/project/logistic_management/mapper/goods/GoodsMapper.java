@@ -8,23 +8,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class GoodsMapper extends BaseMapper {
-    public GoodsDTO toDTO(Goods goods) // ĐỔi từ entity sang DTO
-    {
-        GoodsDTO goodsDTO = new GoodsDTO();
-        goodsDTO.setId(goods.getId());
-        goodsDTO.setName(goods.getName());
-        goodsDTO.setPrice(goods.getPrice());
-        goodsDTO.setQuantity(goods.getQuantity());
-        return goodsDTO;
+    public GoodsDTO toDTO(Goods goods) {
+        if (goods == null) {
+            return null;
+        }
+        return GoodsDTO.builder()
+                .id(goods.getId())
+                .name(goods.getName())
+                .price(goods.getPrice())
+                .quantity(goods.getQuantity())
+                .build();
     }
-
-    public Goods toEntity (GoodsDTO goodsDTO) // đổi từ DTO sang Entity
-    {
-        Goods goods = new Goods();
-        goods.setId(goodsDTO.getId());
-        goods.setName(goodsDTO.getName());
-        goods.setPrice(goodsDTO.getPrice());
-        goods.setQuantity(goodsDTO.getQuantity());
-        return goods;
+    // Chuyển đổi từ DTO sang Entity
+    public Goods toEntity(GoodsDTO goodsDTO) {
+        if (goodsDTO == null) {
+            return null;
+        }
+        return Goods.builder()
+                .id(goodsDTO.getId())
+                .name(goodsDTO.getName())
+                .price(goodsDTO.getPrice())
+                .quantity(goodsDTO.getQuantity())
+                .build();
     }
 }

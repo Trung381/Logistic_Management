@@ -3,11 +3,12 @@ package com.project.logistic_management.dto.request;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
-
+@Builder
 @Getter
 @Setter
 public class InboundTransactionDetailDTO {

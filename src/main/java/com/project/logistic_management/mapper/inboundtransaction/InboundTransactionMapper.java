@@ -9,27 +9,31 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class InboundTransactionMapper extends BaseMapper {
-    public InboundTransactionDTO toDTO(InboundTransaction inboundTransaction) // ĐỔi từ entity sang DTO
-    {
-        InboundTransactionDTO inboundTransactionDTO = new InboundTransactionDTO();
-        inboundTransactionDTO.setId(inboundTransaction.getId());
-        inboundTransactionDTO.setTotalAmount(inboundTransaction.getTotalAmount());
-        inboundTransactionDTO.setIntakeTime(inboundTransaction.getIntakeTime());
-        inboundTransactionDTO.setUserId(inboundTransaction.getUserId());
-        inboundTransactionDTO.setUpdatedAt(inboundTransaction.getUpdatedAt());
-        inboundTransactionDTO.setCreatedAt(inboundTransaction.getCreatedAt());
-        return inboundTransactionDTO;
+    public InboundTransactionDTO toDTO(InboundTransaction inboundTransaction) {
+        if (inboundTransaction == null) {
+            return null;
+        }
+        return InboundTransactionDTO.builder()
+                .id(inboundTransaction.getId())
+                .totalAmount(inboundTransaction.getTotalAmount())
+                .intakeTime(inboundTransaction.getIntakeTime())
+                .userId(inboundTransaction.getUserId())
+                .updatedAt(inboundTransaction.getUpdatedAt())
+                .createdAt(inboundTransaction.getCreatedAt())
+                .build();
     }
 
-    public InboundTransaction toEntity (InboundTransactionDTO inboundTransactionDTO) // đổi từ DTO sang Entity
-    {
-        InboundTransaction inboundTransaction = new InboundTransaction();
-       inboundTransaction.setId(inboundTransactionDTO.getId());
-       inboundTransaction.setTotalAmount(inboundTransactionDTO.getTotalAmount());
-       inboundTransaction.setIntakeTime(inboundTransactionDTO.getIntakeTime());
-       inboundTransaction.setUserId(inboundTransactionDTO.getUserId());
-       inboundTransaction.setUpdatedAt(inboundTransactionDTO.getUpdatedAt());
-       inboundTransaction.setCreatedAt(inboundTransactionDTO.getCreatedAt());
-        return inboundTransaction;
+    public InboundTransaction toEntity(InboundTransactionDTO inboundTransactionDTO) {
+        if (inboundTransactionDTO == null) {
+            return null;
+        }
+        return InboundTransaction.builder()
+                .id(inboundTransactionDTO.getId())
+                .totalAmount(inboundTransactionDTO.getTotalAmount())
+                .intakeTime(inboundTransactionDTO.getIntakeTime())
+                .userId(inboundTransactionDTO.getUserId())
+                .updatedAt(inboundTransactionDTO.getUpdatedAt())
+                .createdAt(inboundTransactionDTO.getCreatedAt())
+                .build();
     }
 }

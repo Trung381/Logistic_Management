@@ -7,4 +7,5 @@ import java.util.List;
 public interface GoodsService {
     GoodsDTO getGoodsByID(Integer id); //tìm hàng hóa theo ID
     List<GoodsDTO> getAllGoods(); // lấy danh sách tất cả hàng hóa
+    List<GoodsDTO> filterGoods(Float minPrice, Float maxPrice, Integer minQuantity, Integer maxQuantity);
 }
