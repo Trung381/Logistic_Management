@@ -5,6 +5,10 @@ import com.project.logistic_management.entity.InboundTransactionDetail;
 import com.project.logistic_management.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class InboundTransactionDetailMapper extends BaseMapper {
 
@@ -28,11 +32,25 @@ public class InboundTransactionDetailMapper extends BaseMapper {
             return null;
         }
         return InboundTransactionDetail.builder()
-                .id(dto.getId())
                 .inboundTransactionId(dto.getInboundTransactionId())
                 .goodsId(dto.getGoodsId())
                 .origin(dto.getOrigin())
                 .quantity(dto.getQuantity())
                 .build();
+    }
+
+    public List<InboundTransactionDetail> toInboundTransactionDetails(List<InboundTransactionDetailDTO> inboundDetailDTOList) {
+        if (inboundDetailDTOList == null || inboundDetailDTOList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return inboundDetailDTOList.stream().map(dto ->
+                InboundTransactionDetail.builder()
+                        .inboundTransactionId(dto.getInboundTransactionId())
+                        .goodsId(dto.getGoodsId())
+                        .origin(dto.getOrigin())
+                        .quantity(dto.getQuantity())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

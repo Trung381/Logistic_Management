@@ -15,10 +15,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 import java.io.ByteArrayInputStream;
@@ -370,33 +367,40 @@ public class ExcelUtils {
     }
 
     private static Date parseDate(Object value) {
-        String[] formatsDate = {"yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy"};
+        String[] formatsDate = {"yyyy-MM-dd HH:mm:ss", "dd/MM/yyyy", "dd/MM/yyyy h:mm:ss a"};
 
         if (ObjectUtils.isEmpty(value)) {
             return null;
         }
 
         String dateStr = value.toString();
-        for (String format : formatsDate) {
-            Date date = null;
 
+        // Xử lý giá trị kiểu số (Excel date)
+        if (dateStr.matches("\\d+(\\.\\d+)?")) {
+            try {
+                double excelDate = Double.parseDouble(dateStr);
+                return convertExcelDateToJavaDate(excelDate);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        // Thử parse theo các định dạng truyền thống
+        for (String format : formatsDate) {
             try {
                 DateFormat dateFormat = new SimpleDateFormat(format);
-                date = dateFormat.parse(dateStr);
+                return dateFormat.parse(dateStr);
             } catch (Exception e) {
-                e.printStackTrace();
-            }
-            if (ObjectUtils.isEmpty(date)) {
-                return date;
+                // Bỏ qua, thử format tiếp theo
             }
         }
 
         try {
-            Date date = (Date) value;
-            return date;
-        } catch (Exception e) {
+            return (Date) value;
+        } catch (ClassCastException e) {
             e.printStackTrace();
-            return new Date();
+            return null;
         }
     }
 
@@ -514,6 +518,14 @@ public class ExcelUtils {
         dataCellStyle.setWrapText(true);
 
         return dataCellStyle;
+    }
+
+    public static Date convertExcelDateToJavaDate(double excelDate) {
+        // Số ngày bắt đầu từ 1/1/1900
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1900, Calendar.JANUARY, 1);
+        calendar.add(Calendar.DATE, (int) excelDate - 2); // Trừ 2 vì Excel bắt đầu từ 1/1/1900
+        return calendar.getTime();
     }
 
 

@@ -1,5 +1,7 @@
 package com.project.logistic_management.utils;
 
+import com.project.logistic_management.dto.request.InboundTransactionDTO;
+import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
 import com.project.logistic_management.entity.OutboundTransaction;
 import com.project.logistic_management.entity.OutboundTransactionDetail;
 import lombok.AllArgsConstructor;
@@ -54,5 +56,38 @@ public class ExportConfig {
         outboundTransactionDetailCellConfig.add(new CellConfig(5, "destination"));
 
         outboundTransactionDetailExport.setCellExportConfigList(outboundTransactionDetailCellConfig);
+    }
+
+    public static final ExportConfig inboundTransactionExport;
+    static {
+        inboundTransactionExport = new ExportConfig();
+        inboundTransactionExport.setSheetIndex(0);
+        inboundTransactionExport.setStartRow(1);
+        inboundTransactionExport.setDataClazz(InboundTransactionDTO.class);
+        List<CellConfig> inboundTransactionCellConfig = new ArrayList<>();
+        inboundTransactionCellConfig.add(new CellConfig(0, "id"));
+        inboundTransactionCellConfig.add(new CellConfig(1, "userId"));
+        inboundTransactionCellConfig.add(new CellConfig(2, "intakeTime"));
+        inboundTransactionCellConfig.add(new CellConfig(3, "totalAmount"));
+        inboundTransactionCellConfig.add(new CellConfig(4, "createdAt"));
+        inboundTransactionCellConfig.add(new CellConfig(5, "updatedAt"));
+
+        inboundTransactionExport.setCellExportConfigList(inboundTransactionCellConfig);
+    }
+
+    public static final ExportConfig inboundTransactionDetailExport;
+    static {
+        inboundTransactionDetailExport = new ExportConfig();
+        inboundTransactionDetailExport.setSheetIndex(0);
+        inboundTransactionDetailExport.setStartRow(1);
+        inboundTransactionDetailExport.setDataClazz(InboundTransactionDetailDTO.class);
+        List<CellConfig> inboundTransactionDetailCellConfig = new ArrayList<>();
+        inboundTransactionDetailCellConfig.add(new CellConfig(0, "id"));
+        inboundTransactionDetailCellConfig.add(new CellConfig(1, "inboundTransactionId"));
+        inboundTransactionDetailCellConfig.add(new CellConfig(2, "goodsId"));
+        inboundTransactionDetailCellConfig.add(new CellConfig(3, "origin"));
+        inboundTransactionDetailCellConfig.add(new CellConfig(4, "quantity"));
+
+        inboundTransactionDetailExport.setCellExportConfigList(inboundTransactionDetailCellConfig);
     }
 }

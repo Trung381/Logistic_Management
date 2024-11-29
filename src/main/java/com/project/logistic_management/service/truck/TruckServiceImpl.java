@@ -29,6 +29,11 @@ public class TruckServiceImpl extends BaseService<TruckRepo, TruckMapper> implem
     }
 
     @Override
+    public List<Truck> getTruckAvailable() {
+        return repository.getTruckAvailable();
+    }
+
+    @Override
     public Truck getTruckById(Integer id) {
         if(id == null) return null;
 

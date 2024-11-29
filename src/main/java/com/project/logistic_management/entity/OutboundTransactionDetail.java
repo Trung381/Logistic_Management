@@ -24,8 +24,8 @@ public class OutboundTransactionDetail {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "price")
-    private Float price;
+//    @Column(name = "price")
+//    private Float price;
 
     @Column(name = "destination")
     private String destination;

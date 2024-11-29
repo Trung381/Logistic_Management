@@ -1,5 +1,7 @@
 package com.project.logistic_management.utils;
 
+import com.project.logistic_management.dto.request.InboundTransactionDTO;
+import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
 import com.project.logistic_management.dto.request.outbound.OutboundTransactionDTO;
 import com.project.logistic_management.dto.request.outbound.OutboundTransactionDetailDTO;
 import lombok.AllArgsConstructor;
@@ -56,6 +58,37 @@ public class ImportConfig {
         outboundTransactionDetailImportCellConfigs.add(new CellConfig(3, "destination"));
 
         outboundTransactionDetailImport.setCellImportConfigs(outboundTransactionDetailImportCellConfigs);
+    }
+
+    public static final ImportConfig inboundTransactionImport;
+    static{
+        inboundTransactionImport = new ImportConfig();
+        inboundTransactionImport.setSheetIndex(0);
+        inboundTransactionImport.setHeaderIndex(0);
+        inboundTransactionImport.setStartRow(1);
+        inboundTransactionImport.setDataClazz(InboundTransactionDTO.class);
+        List<CellConfig> inboundTransactionImportCellConfigs = new ArrayList<>();
+        inboundTransactionImportCellConfigs.add(new CellConfig(0, "userId"));
+        inboundTransactionImportCellConfigs.add(new CellConfig(1, "intakeTime"));
+
+        inboundTransactionImport.setCellImportConfigs(inboundTransactionImportCellConfigs);
+    }
+
+    public static final ImportConfig inboundTransactionDetailImport;
+    static{
+        inboundTransactionDetailImport = new ImportConfig();
+        inboundTransactionDetailImport.setSheetIndex(0);
+        inboundTransactionDetailImport.setHeaderIndex(0);
+        inboundTransactionDetailImport.setStartRow(1);
+        inboundTransactionDetailImport.setDataClazz(InboundTransactionDetailDTO.class);
+        List<CellConfig> inboundTransactionDetailImportCellConfigs = new ArrayList<>();
+
+        inboundTransactionDetailImportCellConfigs.add(new CellConfig(0, "inboundTransactionId"));
+        inboundTransactionDetailImportCellConfigs.add(new CellConfig(1, "goodsId"));
+        inboundTransactionDetailImportCellConfigs.add(new CellConfig(2, "origin"));
+        inboundTransactionDetailImportCellConfigs.add(new CellConfig(3, "quantity"));
+
+        inboundTransactionDetailImport.setCellImportConfigs(inboundTransactionDetailImportCellConfigs);
     }
 
 }

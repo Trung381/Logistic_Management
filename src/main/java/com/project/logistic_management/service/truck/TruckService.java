@@ -12,6 +12,7 @@ public interface TruckService {
 
     Truck createTruck(TruckDTO truckDTO);
     List<Truck> getAllTrucks();
+    List<Truck> getTruckAvailable();
     Truck getTruckById(Integer id);
     Truck getTruckByLicensePlate(String licensePlate);
     Truck updateTruck(Integer id,TruckDTO truckDTO);

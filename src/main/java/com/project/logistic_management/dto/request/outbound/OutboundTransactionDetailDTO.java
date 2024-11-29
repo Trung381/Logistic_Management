@@ -14,8 +14,8 @@ public class OutboundTransactionDetailDTO {
     @NotNull(message = "Số lượng hàng hóa không được để trống")
     private Integer quantity;
 
-    @NotNull(message = "Giá không được để trống")
-    private Float price;
+//    @NotNull(message = "Giá không được để trống")
+//    private Float price;
 
     @NotNull(message = "Mô tả chi tiết phiếu xuất không được để trống")
     private String destination;

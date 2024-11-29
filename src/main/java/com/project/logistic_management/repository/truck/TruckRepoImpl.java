@@ -7,6 +7,7 @@ import com.querydsl.core.BooleanBuilder;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -40,5 +41,18 @@ public class TruckRepoImpl extends BaseRepository implements TruckRepoCustom {
                 .select(qTruck)
                 .fetchOne();
         return Optional.ofNullable(truck);
+    }
+
+    @Override
+    public List<Truck> getTruckAvailable() {
+        QTruck qTruck = QTruck.truck;
+
+        BooleanBuilder builder = new BooleanBuilder();
+        builder.and(qTruck.status.eq(1)); // Điều kiện tìm các xe có status = 1
+
+        return query.from(qTruck)
+                .where(builder)
+                .select(qTruck)
+                .fetch(); // Trả về danh sách các xe tải
     }
 }

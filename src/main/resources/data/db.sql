@@ -36,7 +36,7 @@ CREATE TABLE `inbound_transaction` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_id` INT UNSIGNED NOT NULL COMMENT "Khóa ngoại đến người dùng - Người chịu trách nhiệm cho lần giao dịch",
   `intake_time` TIMESTAMP NOT NULL COMMENT "Thời gian giao dịch",
-  `total_amount` FLOAT NOT NULL DEFAULT 0 COMMENT "Tổng tiền trong một giao dịch",
+  `total_amount` FLOAT DEFAULT 0 COMMENT "Tổng tiền trong một giao dịch",
   `created_at` TIMESTAMP NOT NULL DEFAULT now(),
   `updated_at` TIMESTAMP NOT NULL DEFAULT now(),
   PRIMARY KEY (`id`),

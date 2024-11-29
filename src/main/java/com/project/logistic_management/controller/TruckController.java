@@ -44,6 +44,13 @@ public class TruckController {
         );
     }
 
+    @GetMapping("/truck_available")
+    public ResponseEntity<Object> getTruckAvailable() {
+        return ResponseEntity.ok(
+                BaseResponse.ok(truckService.getTruckAvailable())
+        );
+    }
+
     @PostMapping("/update/{id}")
     public ResponseEntity<Object> updateTruck(@PathVariable Integer id, @Valid @RequestBody TruckDTO truckDTO) {
         return ResponseEntity.ok(

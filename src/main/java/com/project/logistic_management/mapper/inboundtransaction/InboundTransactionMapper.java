@@ -1,11 +1,14 @@
 package com.project.logistic_management.mapper.inboundtransaction;
 
-import com.project.logistic_management.dto.request.GoodsDTO;
 import com.project.logistic_management.dto.request.InboundTransactionDTO;
-import com.project.logistic_management.entity.Goods;
 import com.project.logistic_management.entity.InboundTransaction;
 import com.project.logistic_management.mapper.BaseMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class InboundTransactionMapper extends BaseMapper {
@@ -28,12 +31,27 @@ public class InboundTransactionMapper extends BaseMapper {
             return null;
         }
         return InboundTransaction.builder()
-                .id(inboundTransactionDTO.getId())
                 .totalAmount(inboundTransactionDTO.getTotalAmount())
                 .intakeTime(inboundTransactionDTO.getIntakeTime())
                 .userId(inboundTransactionDTO.getUserId())
-                .updatedAt(inboundTransactionDTO.getUpdatedAt())
-                .createdAt(inboundTransactionDTO.getCreatedAt())
+                .updatedAt(new Date())
+                .createdAt(new Date())
                 .build();
+    }
+
+    public List<InboundTransaction> toInboundTransactions(List<InboundTransactionDTO> inboundDTOList) {
+        if (inboundDTOList == null || inboundDTOList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return inboundDTOList.stream().map(inboundDTO ->
+                InboundTransaction.builder()
+                        .totalAmount(inboundDTO.getTotalAmount())
+                        .intakeTime(inboundDTO.getIntakeTime())
+                        .userId(inboundDTO.getUserId())
+                        .updatedAt(new Date())
+                        .createdAt(new Date())
+                        .build()
+        ).collect(Collectors.toList());
     }
 }

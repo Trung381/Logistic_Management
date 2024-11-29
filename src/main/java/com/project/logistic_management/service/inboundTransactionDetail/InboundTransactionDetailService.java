@@ -1,10 +1,9 @@
 package com.project.logistic_management.service.inboundTransactionDetail;
 
-import com.project.logistic_management.dto.request.InboundTransactionDTO;
 import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
 import com.project.logistic_management.entity.InboundTransactionDetail;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 public interface InboundTransactionDetailService {
@@ -14,4 +13,5 @@ public interface InboundTransactionDetailService {
     List<InboundTransactionDetailDTO> getAllInboundTransactionDetail();
     List<InboundTransactionDetailDTO> getInboundTransactionDetailByTransactionId(Integer Id);
     InboundTransactionDetailDTO getInboundTransactionDetailById(Integer id);
+    List<InboundTransactionDetail> importInboundTransactionDetailData(MultipartFile importFile);
 }

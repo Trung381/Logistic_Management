@@ -1,20 +1,18 @@
 package com.project.logistic_management.service.inboundtransaction;
 
 import com.project.logistic_management.dto.request.InboundTransactionDTO;
-import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
-import com.project.logistic_management.entity.Goods;
 import com.project.logistic_management.entity.InboundTransaction;
-import com.project.logistic_management.entity.InboundTransactionDetail;
 import com.project.logistic_management.exception.def.ConflictException;
 import com.project.logistic_management.exception.def.NotFoundException;
-import com.project.logistic_management.mapper.expenses.ExpensesMapper;
 import com.project.logistic_management.mapper.inboundtransaction.InboundTransactionMapper;
-import com.project.logistic_management.repository.expenses.ExpensesRepo;
-import com.project.logistic_management.repository.goods.GoodsRepo;
 import com.project.logistic_management.repository.inboundtransaction.InboundTransactionRepo;
-import com.project.logistic_management.service.BaseService;
+import com.project.logistic_management.utils.ExcelUtils;
+import com.project.logistic_management.utils.FileFactory;
+import com.project.logistic_management.utils.ImportConfig;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -77,5 +75,15 @@ public class InboundTransactionServiceImpl implements InboundTransactionService 
             throw new NotFoundException("Không tìm thấy giao dịch nhập có ID: "+ id);
         }
         return inboundTransactionMapper.toDTO(transaction);
+    }
+
+    @Override
+    public List<InboundTransaction> importInboundTransactionData(MultipartFile importFile) {
+        Workbook workbook = FileFactory.getWorkbookStream(importFile);
+        List<InboundTransactionDTO> inboundTransactionDTOList = ExcelUtils.getImportData(workbook, ImportConfig.inboundTransactionImport);
+
+        List<InboundTransaction> inboundTransactions = inboundTransactionMapper.toInboundTransactions(inboundTransactionDTOList);
+
+        return inboundTransactionRepo.saveAll(inboundTransactions);
     }
 }

@@ -105,6 +105,10 @@ public class OutboundTransactionServiceImpl extends BaseService<OutboundTransact
         if(outboundTransaction.getStatus() != 0) {
             throw new IllegalStateException("Không thể cập nhật vì phiếu xuất đã được duyệt!");
         }
+
+        if(status == 2) {
+
+        }
         outboundTransaction.setApprovedTime(new Date());
         outboundTransaction.setStatus(status);
 

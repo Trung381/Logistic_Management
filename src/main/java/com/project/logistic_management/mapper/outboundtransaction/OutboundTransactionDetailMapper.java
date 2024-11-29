@@ -21,7 +21,7 @@ public class OutboundTransactionDetailMapper extends BaseMapper {
         return OutboundTransactionDetail.builder()
                 .goodsId(outboundDetailDTO.getGoodsId())
                 .quantity(outboundDetailDTO.getQuantity())
-                .price(outboundDetailDTO.getPrice())
+//                .price(outboundDetailDTO.getPrice())
                 .destination(outboundDetailDTO.getDestination())
                 .build();
     }
@@ -35,7 +35,7 @@ public class OutboundTransactionDetailMapper extends BaseMapper {
                 OutboundTransactionDetail.builder()
                         .goodsId(outboundDetailDTO.getGoodsId())
                         .quantity(outboundDetailDTO.getQuantity())
-                        .price(outboundDetailDTO.getPrice())
+//                        .price(outboundDetailDTO.getPrice())
                         .destination(outboundDetailDTO.getDestination())
                         .build()
         ).collect(Collectors.toList());
@@ -47,7 +47,7 @@ public class OutboundTransactionDetailMapper extends BaseMapper {
 
         outboundTransactionDetail.setGoodsId(outboundDetailDTO.getGoodsId());
         outboundTransactionDetail.setQuantity(outboundDetailDTO.getQuantity());
-        outboundTransactionDetail.setPrice(outboundDetailDTO.getPrice());
+//        outboundTransactionDetail.setPrice(outboundDetailDTO.getPrice());
         outboundTransactionDetail.setDestination(outboundDetailDTO.getDestination());
     }
 }

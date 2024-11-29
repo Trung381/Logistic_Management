@@ -1,5 +1,6 @@
 package com.project.logistic_management.service.inboundTransactionDetail;
 
+import com.project.logistic_management.dto.request.InboundTransactionDTO;
 import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
 import com.project.logistic_management.entity.Goods;
 import com.project.logistic_management.entity.InboundTransaction;
@@ -10,8 +11,13 @@ import com.project.logistic_management.mapper.inboundTransactionDetail.InboundTr
 import com.project.logistic_management.repository.goods.GoodsRepo;
 import com.project.logistic_management.repository.inboundTransactionDetail.InboundTransactionDetailRepo;
 import com.project.logistic_management.repository.inboundtransaction.InboundTransactionRepo;
+import com.project.logistic_management.utils.ExcelUtils;
+import com.project.logistic_management.utils.FileFactory;
+import com.project.logistic_management.utils.ImportConfig;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -125,6 +131,16 @@ public class InboundTransactionDetailServiceImpl implements InboundTransactionDe
         InboundTransactionDetail detail = inboundTransactionDetailRepo.findById(id)
                 .orElseThrow(() -> new NotFoundException("Không tìm thấy giao dịch nào có ID tương ứng!"));
         return inboundTransactionDetailMapper.toDTO(detail);
+    }
+
+    @Override
+    public List<InboundTransactionDetail> importInboundTransactionDetailData(MultipartFile importFile) {
+        Workbook workbook = FileFactory.getWorkbookStream(importFile);
+        List<InboundTransactionDetailDTO> inboundTransactionDetailDTOList = ExcelUtils.getImportData(workbook, ImportConfig.inboundTransactionDetailImport);
+
+        List<InboundTransactionDetail> inboundTransactionDetails = inboundTransactionDetailMapper.toInboundTransactionDetails(inboundTransactionDetailDTOList);
+
+        return inboundTransactionDetailRepo.saveAll(inboundTransactionDetails);
     }
 
     @Override
