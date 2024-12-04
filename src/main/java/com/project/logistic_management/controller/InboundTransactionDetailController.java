@@ -1,13 +1,11 @@
 package com.project.logistic_management.controller;
 
-import com.project.logistic_management.dto.request.InboundTransactionDTO;
 import com.project.logistic_management.dto.request.InboundTransactionDetailDTO;
 import com.project.logistic_management.dto.response.BaseResponse;
-import com.project.logistic_management.entity.InboundTransactionDetail;
 import com.project.logistic_management.service.inboundTransactionDetail.InboundTransactionDetailServiceImpl;
 import com.project.logistic_management.utils.ExcelUtils;
 import com.project.logistic_management.utils.ExportConfig;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -25,9 +23,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/inbound_transaction_details")
+@RequiredArgsConstructor
 public class InboundTransactionDetailController {
-    @Autowired
-    private InboundTransactionDetailServiceImpl inboundTransactionDetailService;
+    private final InboundTransactionDetailServiceImpl inboundTransactionDetailService;
 
     @PostMapping("/create")
     public ResponseEntity<BaseResponse<InboundTransactionDetailDTO>> addInboundTransactionDetail(
@@ -43,27 +41,21 @@ public class InboundTransactionDetailController {
         InboundTransactionDetailDTO updatedDetail = inboundTransactionDetailService.updateInboundTransactionDetail(id, dto);
         return ResponseEntity.ok(BaseResponse.ok(updatedDetail));
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<BaseResponse<InboundTransactionDetailDTO>> deleteInboundTransactionDetail(
-            @PathVariable Integer id,
-            @RequestBody InboundTransactionDetailDTO dto) {
-        InboundTransactionDetailDTO deletedDetail = inboundTransactionDetailService.deleteInboundTransactionDetail(id, dto);
-        return ResponseEntity.ok(BaseResponse.ok(deletedDetail));
-    }
-    @GetMapping("/findAll")
+
+    @GetMapping("/find_all")
     public ResponseEntity<BaseResponse<List<InboundTransactionDetailDTO>>> getAllInboundTransactionDetail() {
         List<InboundTransactionDetailDTO>  transactionDetails = inboundTransactionDetailService
                 .getAllInboundTransactionDetail();
         return ResponseEntity.ok(BaseResponse.ok(transactionDetails));
     }
-    @GetMapping("/findById/{id}")
+    @GetMapping("/find_by_id/{id}")
     public ResponseEntity<BaseResponse<InboundTransactionDetailDTO>> getInboundTransactionDetailById(
             @PathVariable Integer id) {
         InboundTransactionDetailDTO transactionDetail = inboundTransactionDetailService.getInboundTransactionDetailById(id);
         return ResponseEntity.ok(BaseResponse.ok(transactionDetail));
     }
 
-    @GetMapping("/findByTransactionId/{id}")
+    @GetMapping("/find_by_transaction_id/{id}")
     public ResponseEntity<BaseResponse<List<InboundTransactionDetailDTO>>> getInboundTransactionDetailByTransactionId(
             @PathVariable Integer id) {
         List<InboundTransactionDetailDTO>  transactionDetails = inboundTransactionDetailService
@@ -90,7 +82,6 @@ public class InboundTransactionDetailController {
                     .body(inputStreamResource);
         } else {
             throw new Exception("No data");
-
         }
     }
 

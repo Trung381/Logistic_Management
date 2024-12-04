@@ -1,38 +1,62 @@
 package com.project.logistic_management.service.inboundtransaction;
 
+import com.project.logistic_management.dto.request.InboundDTO;
 import com.project.logistic_management.dto.request.InboundTransactionDTO;
 import com.project.logistic_management.entity.InboundTransaction;
+import com.project.logistic_management.entity.InboundTransactionDetail;
 import com.project.logistic_management.exception.def.ConflictException;
 import com.project.logistic_management.exception.def.NotFoundException;
+import com.project.logistic_management.mapper.inboundtransaction.InboundMapper;
 import com.project.logistic_management.mapper.inboundtransaction.InboundTransactionMapper;
+import com.project.logistic_management.repository.goods.GoodsRepo;
+import com.project.logistic_management.repository.inboundTransactionDetail.InboundTransactionDetailRepo;
 import com.project.logistic_management.repository.inboundtransaction.InboundTransactionRepo;
 import com.project.logistic_management.utils.ExcelUtils;
 import com.project.logistic_management.utils.FileFactory;
 import com.project.logistic_management.utils.ImportConfig;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class InboundTransactionServiceImpl implements InboundTransactionService {
-    @Autowired
-    private InboundTransactionRepo inboundTransactionRepo;
-    @Autowired
-    private InboundTransactionMapper inboundTransactionMapper;
+    private final InboundTransactionRepo inboundTransactionRepo;
+    private final InboundTransactionMapper inboundTransactionMapper;
+    private final InboundMapper mapper;
+    private final InboundTransactionDetailRepo detailRepo;
+    private final GoodsRepo goodsRepo;
 
 
     @Override
-    public InboundTransactionDTO addInboundTransaction(InboundTransactionDTO dto) {
-        if (dto.getId() != null && inboundTransactionRepo.existsById(dto.getId())) {
-            throw new ConflictException("ID của giao dịch đã tồn tại. Vui lòng tạo giao dịch khác.");
-        }
-        InboundTransaction inboundTransaction = inboundTransactionMapper.toEntity(dto);
+    @Transactional
+    public InboundTransaction addInboundTransaction(InboundDTO dto) {
+//        if (dto.getId() != null && inboundTransactionRepo.existsById(dto.getId())) {
+//            throw new ConflictException("ID của giao dịch đã tồn tại. Vui lòng tạo giao dịch khác.");
+//        }
+//        InboundTransaction inboundTransaction = inboundTransactionMapper.toEntity(dto);
+        InboundTransaction inboundTransaction = mapper.toInbound(dto);
         InboundTransaction savedTransaction = inboundTransactionRepo.save(inboundTransaction);
-        return inboundTransactionMapper.toDTO(savedTransaction);
+
+        List<InboundTransactionDetail> details = mapper.toListDetail(savedTransaction.getId(), dto);
+        detailRepo.saveAll(details);
+
+        List<Integer> idsDetail = new ArrayList<>(), quantitiesDetail = new ArrayList<>();
+        for (InboundTransactionDetail detail : details) {
+            idsDetail.add(detail.getGoodsId());
+            quantitiesDetail.add(detail.getQuantity());
+        }
+
+        goodsRepo.updateQuantity(idsDetail, quantitiesDetail);
+
+        return savedTransaction;
     }
 
     @Override
